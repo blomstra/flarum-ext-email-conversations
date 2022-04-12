@@ -1,5 +1,6 @@
 {
     "name": "blomstra/post-by-mail",
+    "description": "Start discussions and reply to discussions via email ",
     "keywords": [
         "flarum"
     ],
