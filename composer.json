@@ -1,0 +1,34 @@
+{
+    "name": "blomstra/post-by-mail",
+    "keywords": [
+        "flarum"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^1.2.0"
+    },
+    "authors": [
+        {
+            "name": "Team Blomstra",
+            "email": "development@blomstra.net",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Blomstra\\PostByMail\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Post By Mail",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-mail-bulk",
+                "backgroundColor": "#EBF1FD",
+                "color": "#3a98d0"
+            }
+        }
+    }
+}
