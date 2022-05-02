@@ -1,7 +1,10 @@
 blomstra-post-by-mail:
-  # For more details on the format
-  # Checkout https://docs.flarum.org/extend/i18n.html#appendix-a-standard-key-format
   admin:
-    my_cool_key: My Cool Key
 
   forum:
+    profile:
+      settings:
+        additional-email: Additional email addresses
+        additional-email-help: These email addresses are able to send instructional emails to the forum, such as starting a discussion, or posting a reply.
+        primary-email: Primary email
+        primary-email-help: This is the email address where we will send notifications to, and for which you can login with.
