@@ -45,5 +45,5 @@ return [
             if ($serializer->getActor()->can('viewAdditionalEmailAddresses', $user)) {
                 return $serializer->hasMany($user, AdditionalEmailSerializer::class, 'additional_emails');
             }
-        })
+        }),
 ];
