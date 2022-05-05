@@ -23,7 +23,7 @@ class UserEmailValidator extends AbstractValidator
             'required',
             'email',
             'max:255',
-            'unique:UserEmail,email',
+            'unique:'.UserEmail::class.',email',
         ],
         'user_id' => [
             'required',
