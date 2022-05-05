@@ -20,6 +20,7 @@ use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\UserRepository;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -82,10 +83,10 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
         $this->validator->assertValid($model->getAttributes());
 
         $existingCount = $this->repository->getCountForUser($user, $actor);
-        $maxCount = $this->settings->get('blomstra-post-by-mail.max-additional-emails-count');
+        $maxCount = $this->settings->get('blomstra-post-by-mail.max-additional-emails-count', 5);
 
         if ($existingCount >= $maxCount) {
-            throw new \Error('You may only have a maximum of' . $maxCount . ' additional email addresses.');
+            throw new \Flarum\Foundation\ValidationException(['You may only have a maximum of ' . $maxCount . ' additional email addresses.']);
         }
 
         $model->saveOrFail();
