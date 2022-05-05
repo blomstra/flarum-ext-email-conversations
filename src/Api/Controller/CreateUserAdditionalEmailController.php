@@ -62,7 +62,7 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
 
         $model = new UserEmail();
         $model->user_id = $user->id;
-        $model->email   = Arr::get($data, 'attributes.email');
+        $model->email = Arr::get($data, 'attributes.email');
         $model->is_confirmed = false;
 
         $this->validator->assertValid($model->getAttributes());
