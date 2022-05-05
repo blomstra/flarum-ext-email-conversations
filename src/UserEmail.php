@@ -29,6 +29,11 @@ class UserEmail extends AbstractModel
     /**
      * {@inheritdoc}
      */
+    protected $timestamps = true;
+
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'is_confirmed' => 'bool'
     ];
