@@ -24,7 +24,7 @@ class UserEmailRepository
      */
     public function findOrFail($id, User $actor = null): UserEmail
     {
-        $email = UserEmail::findOrFail($id);
+        $email = UserEmail::with(['user'])->findOrFail($id);
 
         $actor->assertCan('viewAdditionalEmailAddresses', $email->user());
 
@@ -35,6 +35,6 @@ class UserEmailRepository
     {
         $actor->assertCan('viewAdditionalEmailAddresses', $user);
 
-        return UserEmail::where('user_id', $actor->id)->get();
+        return UserEmail::with(['user'])->where('user_id', $actor->id)->get();
     }
 }

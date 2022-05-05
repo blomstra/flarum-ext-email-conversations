@@ -11,7 +11,9 @@
 
 namespace Blomstra\PostByMail\Api\Serializer;
 
+use Blomstra\PostByMail\UserEmail;
 use Flarum\Api\Serializer\AbstractSerializer;
+use Flarum\Api\Serializer\BasicUserSerializer;
 
 class AdditionalEmailSerializer extends AbstractSerializer
 {
@@ -32,5 +34,13 @@ class AdditionalEmailSerializer extends AbstractSerializer
             'createdAt'   => $this->formatDate($additionalEmail->created_at),
             'updatedAt'   => $this->formatDate($additionalEmail->updated_at),
         ];
+    }
+
+    /**
+     * @return \Tobscure\JsonApi\Relationship
+     */
+    protected function user(UserEmail $additionalEmail)
+    {
+        return $this->hasOne($additionalEmail, BasicUserSerializer::class);
     }
 }
