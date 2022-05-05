@@ -27,6 +27,13 @@ class UserEmail extends AbstractModel
     protected $dates = ['updated_at', 'created_at'];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'is_confirmed' => 'bool'
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
