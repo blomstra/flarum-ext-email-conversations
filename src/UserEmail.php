@@ -29,7 +29,7 @@ class UserEmail extends AbstractModel
     /**
      * {@inheritdoc}
      */
-    protected $timestamps = true;
+    public $timestamps = true;
 
     /**
      * {@inheritdoc}
