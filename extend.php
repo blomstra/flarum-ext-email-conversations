@@ -20,14 +20,14 @@ use Flarum\User\User;
 
 return [
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/less/forum.less'),
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/less/forum.less'),
 
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js')
-        ->css(__DIR__.'/less/admin.less'),
+        ->js(__DIR__ . '/js/dist/admin.js')
+        ->css(__DIR__ . '/less/admin.less'),
 
-    new Extend\Locales(__DIR__.'/locale'),
+    new Extend\Locales(__DIR__ . '/locale'),
 
     (new Extend\Model(User::class))
         ->hasMany('additional_emails', UserEmail::class, 'user_id'),
@@ -46,4 +46,9 @@ return [
                 return $serializer->hasMany($user, AdditionalEmailSerializer::class, 'additional_emails');
             }
         }),
+
+    (new Extend\Routes('api'))
+        ->get('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.list', Api\Controller\ListUserAdditionalEmailsController::class)
+        ->post('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.create', Api\Controller\CreateUserAdditionalEmailController::class)
+        ->post('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.update', Api\Controller\UpdateUserAdditionalEmailController::class),
 ];
