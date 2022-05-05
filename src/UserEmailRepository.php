@@ -1,10 +1,18 @@
 <?php
 
+/*
+ * This file is part of blomstra/post-by-mail.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\PostByMail;
 
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
-use Blomstra\PostByMail\UserEmail;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserEmailRepository
@@ -18,8 +26,9 @@ class UserEmailRepository
     }
 
     /**
-     * @param int $id
+     * @param int  $id
      * @param User $actor
+     *
      * @return UserEmail
      */
     public function findOrFail($id, User $actor = null): UserEmail

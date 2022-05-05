@@ -1,16 +1,25 @@
 <?php
 
+/*
+ * This file is part of blomstra/post-by-mail.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\PostByMail\Api\Controller;
 
-use Flarum\Api\Controller\AbstractCreateController;
-use Flarum\Http\RequestUtil;
-use Illuminate\Support\Arr;
-use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
 use Blomstra\PostByMail\UserEmail;
 use Blomstra\PostByMail\UserEmailValidator;
+use Flarum\Api\Controller\AbstractCreateController;
+use Flarum\Http\RequestUtil;
 use Flarum\User\UserRepository;
+use Illuminate\Support\Arr;
+use Psr\Http\Message\ServerRequestInterface;
+use Tobscure\JsonApi\Document;
 
 class CreateUserAdditionalEmailController extends AbstractCreateController
 {
@@ -52,7 +61,7 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
 
         $model = new UserEmail([
             'user_id' => $user->id,
-            'email' => Arr::get($data, 'attributes.email'),
+            'email'   => Arr::get($data, 'attributes.email'),
         ]);
 
         $this->validator->assertValid($model->getAttributes());
