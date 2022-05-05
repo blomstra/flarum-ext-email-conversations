@@ -54,20 +54,21 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
         $actor = RequestUtil::getActor($request);
         $data = Arr::get($request->getParsedBody(), 'data', []);
 
-        $userId = Arr::get($data, 'relationships.user');
+        $userId = Arr::get($data, 'relationships.user.data.id');
+
         $user = $this->users->findOrFail($userId, $actor);
 
         $actor->assertCan('editAdditionalEmailAddresses', $user);
 
-        $model = new UserEmail([
-            'user_id' => $user->id,
-            'email'   => Arr::get($data, 'attributes.email'),
-        ]);
+        $model = new UserEmail();
+        $model->user_id = $user->id;
+        $model->email   = Arr::get($data, 'attributes.email');
+        $model->is_confirmed = false;
 
         $this->validator->assertValid($model->getAttributes());
 
         $model->saveOrFail();
 
-        return $model;
+        return $model->load('user');
     }
 }

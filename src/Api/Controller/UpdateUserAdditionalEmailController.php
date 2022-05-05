@@ -69,8 +69,8 @@ class UpdateUserAdditionalEmailController extends AbstractShowController
         //     $model->is_confirmed = $attributes['isConfirmed'];
         // }
 
-        if (isset($relationships['user_id'])) {
-            $model->email = $attributes['user_id'];
+        if (Arr::has($relationships, 'user.id')) {
+            $model->email = $attributes['user']['id'];
         }
 
         $this->validator->assertValid($model->getAttributes());
