@@ -12,6 +12,7 @@
 namespace Blomstra\PostByMail;
 
 use Flarum\Foundation\AbstractValidator;
+use Flarum\User\User;
 
 class UserEmailValidator extends AbstractValidator
 {
@@ -24,6 +25,7 @@ class UserEmailValidator extends AbstractValidator
             'email',
             'max:255',
             'unique:'.UserEmail::class.',email',
+            'unique:'.User::class.',email',
         ],
         'user_id' => [
             'required',
