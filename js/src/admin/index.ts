@@ -6,6 +6,13 @@ app.initializers.add('blomstra/post-by-mail', () => {
 
   app.extensionData
     .for('blomstra-post-by-mail')
+    .registerSetting({
+      setting: 'blomstra-post-by-mail.max-additional-emails-count',
+      type: 'number',
+      min: 0,
+      max: 100,
+      label: 'Maximum number of additional emails per user',
+    })
     .registerPermission(
       {
         icon: 'fas fa-mail-bulk',

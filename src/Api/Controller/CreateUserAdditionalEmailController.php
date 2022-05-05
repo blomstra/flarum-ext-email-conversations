@@ -13,9 +13,11 @@ namespace Blomstra\PostByMail\Api\Controller;
 
 use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
 use Blomstra\PostByMail\UserEmail;
+use Blomstra\PostByMail\UserEmailRepository;
 use Blomstra\PostByMail\UserEmailValidator;
 use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Http\RequestUtil;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\UserRepository;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -38,10 +40,22 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
      */
     protected $validator;
 
-    public function __construct(UserRepository $users, UserEmailValidator $validator)
+    /**
+     * @var UserEmailRepository
+     */
+    protected $repository;
+
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    protected $settings;
+
+    public function __construct(UserRepository $users, UserEmailValidator $validator, UserEmailRepository $repository, SettingsRepositoryInterface $settings)
     {
         $this->users = $users;
         $this->validator = $validator;
+        $this->repository = $repository;
+        $this->settings = $settings;
     }
 
     /**
@@ -66,6 +80,13 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
         $model->is_confirmed = false;
 
         $this->validator->assertValid($model->getAttributes());
+
+        $existingCount = $this->repository->getCountForUser($user, $actor);
+        $maxCount = $this->settings->get('blomstra-post-by-mail.max-additional-emails-count');
+
+        if ($existingCount >= $maxCount) {
+            throw new \Error('You may only have a maximum of' . $maxCount . ' additional email addresses.');
+        }
 
         $model->saveOrFail();
 

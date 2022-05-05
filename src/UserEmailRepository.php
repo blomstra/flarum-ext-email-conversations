@@ -46,4 +46,11 @@ class UserEmailRepository
 
         return UserEmail::with(['user'])->where('user_id', $actor->id)->get();
     }
+
+    public function getCountForUser(User $user, User $actor = null): int
+    {
+        $actor->assertCan('viewAdditionalEmailAddresses', $user);
+
+        return UserEmail::where('user_id', $actor->id)->count();
+    }
 }
