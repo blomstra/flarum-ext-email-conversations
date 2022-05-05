@@ -35,7 +35,7 @@ class UserEmail extends AbstractModel
      * {@inheritdoc}
      */
     protected $casts = [
-        'is_confirmed' => 'bool'
+        'is_confirmed' => 'bool',
     ];
 
     /**
