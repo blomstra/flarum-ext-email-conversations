@@ -1,0 +1,70 @@
+.SettingsPage {
+  .item-account {
+    .item-emailAddresses {
+      display: block;
+      margin: 0;
+
+      fieldset {
+        legend {
+          float: left;
+          width: 100%;
+        }
+
+        &:not(:last-child) {
+          margin-bottom: 16px;
+        }
+      }
+    }
+  }
+}
+
+.MultiEmailSettings {
+  &-LoadingAdditional {
+    height: 48px;
+  }
+
+  &-AdditionalStatus {
+    color: @control-color;
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  &-AdditionalEmails {
+    list-style: none;
+  }
+
+  &-AddAdditionalEmail {
+    margin-top: 12px;
+  }
+
+  &-Email {
+    background-color: @control-bg;
+    color: @control-color;
+    padding: 4px 4px 4px 16px;
+    border-radius: @border-radius;
+
+    display: flex;
+    align-items: center;
+
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    > :not(:last-child) {
+      margin-right: 4px;
+    }
+
+    &Address {
+      flex-grow: 1;
+    }
+
+    &UnconfirmedChip {
+      padding: 4px 8px;
+      line-height: 1;
+      border-radius: calc(0.5em + 2px);
+      background: var(--alert-bg);
+      color: var(--alert-color);
+      margin-right: 8px !important;
+      display: block;
+    }
+  }
+}

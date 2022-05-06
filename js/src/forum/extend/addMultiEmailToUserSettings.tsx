@@ -4,7 +4,7 @@ import { extend } from 'flarum/common/extend';
 import SettingsPage from 'flarum/forum/components/SettingsPage';
 import ItemList from 'flarum/common/utils/ItemList';
 
-import EmailDisplay from '../components/MultiEmailSettings';
+import EmailDisplay from '../components/EmailSettings/MultiEmailSettings';
 
 import type Mithril from 'mithril';
 
