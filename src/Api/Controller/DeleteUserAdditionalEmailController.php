@@ -1,13 +1,22 @@
 <?php
 
+/*
+ * This file is part of blomstra/post-by-mail.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\PostByMail\Api\Controller;
 
+use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\PostByMail\UserEmailRepository;
 use Flarum\Api\Controller\AbstractDeleteController;
 use Flarum\Http\RequestUtil;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
-use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
-use Blomstra\PostByMail\UserEmailRepository;
 
 class DeleteUserAdditionalEmailController extends AbstractDeleteController
 {
