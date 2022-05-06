@@ -20,7 +20,7 @@ class AdditionalEmailSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
-    protected $type = 'additionalEmail';
+    protected $type = 'blomstra-additional-email';
 
     /**
      * {@inheritdoc}
