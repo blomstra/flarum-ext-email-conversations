@@ -49,7 +49,7 @@ class AdditionalEmailEventSubscriber
         $token = $this->generateToken($user, $event->additionalEmail->email);
         $data = $this->getEmailData($user, $token);
 
-        $this->sendConfirmationEmail($user, $data);
+        $this->sendConfirmationEmail($user, $event->additionalEmail->email, $data);
     }
 
     /**
@@ -73,11 +73,11 @@ class AdditionalEmailEventSubscriber
      * @param User  $user
      * @param array $data
      */
-    protected function sendConfirmationEmail(User $user, $data)
+    protected function sendConfirmationEmail(User $user, string $email, $data)
     {
-        $body = $this->translator->trans('blomstraPostByEmail.email.multi-emails.body', $data);
-        $subject = $this->translator->trans('blomstraPostByEmail.email.multi-emails.subject');
+        $body = $this->translator->trans('blomstra-post-by-mail.email.multi-emails.body', $data);
+        $subject = $this->translator->trans('blomstra-post-by-mail.email.multi-emails.subject');
 
-        $this->queue->push(new SendRawEmailJob($user->email, $subject, $body));
+        $this->queue->push(new SendRawEmailJob($email, $subject, $body));
     }
 }

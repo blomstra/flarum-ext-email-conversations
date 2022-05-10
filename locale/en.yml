@@ -35,7 +35,7 @@ blomstra-post-by-mail:
     multi-emails:
       subject: Confirm your additional email address
       body: |
-        Hey {display_name},
+        Hey {username},
 
         Someone just added this email address to their existing account on {forum}.
 
