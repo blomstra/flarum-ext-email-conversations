@@ -12,6 +12,7 @@
 namespace Blomstra\PostByMail\Api\Controller;
 
 use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\PostByMail\Event\AdditionalEmailCreated;
 use Blomstra\PostByMail\UserEmail;
 use Blomstra\PostByMail\UserEmailRepository;
 use Blomstra\PostByMail\UserEmailValidator;
@@ -19,6 +20,7 @@ use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\UserRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -50,12 +52,18 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
      */
     protected $settings;
 
-    public function __construct(UserRepository $users, UserEmailValidator $validator, UserEmailRepository $repository, SettingsRepositoryInterface $settings)
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
+
+    public function __construct(UserRepository $users, UserEmailValidator $validator, UserEmailRepository $repository, SettingsRepositoryInterface $settings, Dispatcher $events)
     {
         $this->users = $users;
         $this->validator = $validator;
         $this->repository = $repository;
         $this->settings = $settings;
+        $this->events = $events;
     }
 
     /**
@@ -63,8 +71,6 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // See https://docs.flarum.org/extend/api.html#api-endpoints for more information.
-
         $actor = RequestUtil::getActor($request);
         $data = Arr::get($request->getParsedBody(), 'data', []);
 
@@ -89,6 +95,8 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
         }
 
         $model->saveOrFail();
+
+        $this->events->dispatch(new AdditionalEmailCreated($actor, $model, $data));
 
         return $model->load('user');
     }
