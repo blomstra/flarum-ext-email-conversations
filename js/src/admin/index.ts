@@ -12,6 +12,7 @@ app.initializers.add('blomstra/post-by-mail', () => {
       min: 0,
       max: 100,
       label: 'Maximum number of additional emails per user',
+      placeholder: '5',
     })
     .registerPermission(
       {
