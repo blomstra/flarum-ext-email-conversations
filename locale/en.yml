@@ -34,7 +34,7 @@ blomstra-post-by-mail:
             add_button: Save new email
   views:
     confirm_email:
-      text: blah
+      text: Please confirm ownership of the provided additional email address by clicking below
 
   email:
     multi-emails:
