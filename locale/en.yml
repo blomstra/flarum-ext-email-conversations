@@ -1,7 +1,51 @@
 blomstra-post-by-mail:
-  # For more details on the format
-  # Checkout https://docs.flarum.org/extend/i18n.html#appendix-a-standard-key-format
   admin:
-    my_cool_key: My Cool Key
+    settings:
+      maximum_additional_emails_per_user: Maximum number of additional emails for each user
+    permissions:
+      have_additional_emails: Have additional email addresses
+      manage_additional_emails_of_others: Manager other users' additional email addresses
 
   forum:
+    profile:
+      settings:
+        multi-email:
+          additional-email: Additional email addresses
+          additional-email-help: These email addresses are able to send instructional emails to the forum, such as starting a discussion, or posting a reply.
+          primary-email: Primary email
+          primary-email-help: This is the email address where we will send notifications to, and for which you can login with.
+
+          error_loading_additional: An error occurred when loading additional emails for your account.
+          confirm_delete_additional_email: Are you sure you want to delete the additional email "{email}"?
+
+          no_additional_emails: You don't have any additional emails linked to your account yet.
+          add_additional_email: Add additional email
+
+          email:
+            show-email: Show full email
+            hide-email: Hide full email
+            unconfirmed_warning: Unconfirmed
+
+          add-additional-email-modal:
+            title: Add additional email
+
+            email_label: Email address
+
+            add_button: Save new email
+  views:
+    confirm_email:
+      text: Please confirm ownership of the provided additional email address by clicking below
+
+  email:
+    multi-emails:
+      subject: Confirm your additional email address
+      body: |
+        Hey {username},
+
+        Someone just added this email address to their existing account on {forum}.
+
+        If this was you, simply click the following link and this address will be activated:
+        {url}
+
+        If this was not you, please ignore this email.
+        
