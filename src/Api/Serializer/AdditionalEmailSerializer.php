@@ -28,11 +28,11 @@ class AdditionalEmailSerializer extends AbstractSerializer
     protected function getDefaultAttributes($additionalEmail)
     {
         return [
-            'id'          => $additionalEmail->id,
-            'email'       => $additionalEmail->email,
+            'id'           => $additionalEmail->id,
+            'email'        => $additionalEmail->email,
             'is_confirmed' => $additionalEmail->is_confirmed,
-            'createdAt'   => $this->formatDate($additionalEmail->created_at),
-            'updatedAt'   => $this->formatDate($additionalEmail->updated_at),
+            'createdAt'    => $this->formatDate($additionalEmail->created_at),
+            'updatedAt'    => $this->formatDate($additionalEmail->updated_at),
         ];
     }
 
