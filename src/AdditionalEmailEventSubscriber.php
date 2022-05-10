@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of blomstra/post-by-mail.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\PostByMail;
 
 use Blomstra\PostByMail\Event\AdditionalEmailCreated;
@@ -20,11 +29,13 @@ class AdditionalEmailEventSubscriber
     public function __construct(protected SettingsRepositoryInterface $settings, protected Queue $queue, protected UrlGenerator $url, protected Translator $translator)
     {
     }
-    
+
     public function subscribe(Dispatcher $events)
     {
         $events->listen(
-            AdditionalEmailCreated::class, [$this, 'handle']);
+            AdditionalEmailCreated::class,
+            [$this, 'handle']
+        );
     }
 
     public function handle(AdditionalEmailCreated $event)
@@ -32,7 +43,7 @@ class AdditionalEmailEventSubscriber
         if ($event->additionalEmail->is_confirmed) {
             return;
         }
-        
+
         $user = $event->user;
 
         $token = $this->generateToken($user, $event->additionalEmail->email);
@@ -44,21 +55,22 @@ class AdditionalEmailEventSubscriber
     /**
      * Get the data that should be made available to email template for additional email addresses.
      *
-     * @param User $user
+     * @param User       $user
      * @param EmailToken $token
+     *
      * @return array
      */
     protected function getEmailData(User $user, EmailToken $token)
     {
         return [
             'username' => $user->display_name,
-            'url' => $this->url->to('forum')->route('blomstraPostByEmail.multiEmails.confirm', ['token' => $token->token]),
-            'forum' => $this->settings->get('forum_title')
+            'url'      => $this->url->to('forum')->route('blomstraPostByEmail.multiEmails.confirm', ['token' => $token->token]),
+            'forum'    => $this->settings->get('forum_title'),
         ];
     }
 
     /**
-     * @param User $user
+     * @param User  $user
      * @param array $data
      */
     protected function sendConfirmationEmail(User $user, $data)
