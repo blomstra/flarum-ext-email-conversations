@@ -18,16 +18,18 @@ app.initializers.add('blomstra/post-by-mail', () => {
       {
         icon: 'fas fa-mail-bulk',
         label: app.translator.trans('blomstra-post-by-mail.admin.permissions.have_additional_emails'),
-        permission: 'setAdditionalEmail',
+        permission: 'haveAdditionalEmail',
       },
       'start'
     )
-    .registerPermission(
-      {
-        icon: 'fas fa-mail-bulk',
-        label: app.translator.trans('blomstra-post-by-mail.admin.permissions.manage_additional_emails_of_others'),
-        permission: 'viewAdditionalEmailAddresses',
-      },
-      'moderate'
-    );
+    // Not worrying about anything but the current user for now, but this will be required for when we add
+    // the ability for Mods, etc to edit other users' email addresses.
+    // .registerPermission(
+    //   {
+    //     icon: 'fas fa-mail-bulk',
+    //     label: app.translator.trans('blomstra-post-by-mail.admin.permissions.manage_additional_emails_of_others'),
+    //     permission: 'viewAdditionalEmailAddresses',
+    //   },
+    //   'moderate'
+    // );
 });

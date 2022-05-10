@@ -78,7 +78,7 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
 
         $user = $this->users->findOrFail($userId, $actor);
 
-        $actor->assertCan('editAdditionalEmailAddresses', $user);
+        $actor->assertCan('haveAdditionalEmail', $user);
 
         $model = new UserEmail();
         $model->user_id = $user->id;

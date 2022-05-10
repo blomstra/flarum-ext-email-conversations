@@ -40,12 +40,14 @@ return [
             return $serializer->hasMany($user, AdditionalEmailSerializer::class, 'additional_emails');
         }),
 
-    (new Extend\ApiSerializer(UserSerializer::class))
-        ->relationship('additional_emails', function (UserSerializer $serializer, User $user) {
-            if ($serializer->getActor()->can('viewAdditionalEmailAddresses', $user)) {
-                return $serializer->hasMany($user, AdditionalEmailSerializer::class, 'additional_emails');
-            }
-        }),
+    // Not worrying about anything but the current user for now, but this will be required for when we add
+    // the ability for Mods, etc to edit other users' email addresses.
+    // (new Extend\ApiSerializer(UserSerializer::class))
+    //     ->relationship('additional_emails', function (UserSerializer $serializer, User $user) {
+    //         if ($serializer->getActor()->can('viewAdditionalEmailAddresses', $user)) {
+    //             return $serializer->hasMany($user, AdditionalEmailSerializer::class, 'additional_emails');
+    //         }
+    //     }),
 
     (new Extend\Routes('api'))
         ->get('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.list', Api\Controller\ListUserAdditionalEmailsController::class)

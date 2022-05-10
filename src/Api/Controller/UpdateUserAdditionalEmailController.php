@@ -48,15 +48,15 @@ class UpdateUserAdditionalEmailController extends AbstractShowController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // See https://docs.flarum.org/extend/api.html#api-endpoints for more information.
-
         $actor = RequestUtil::getActor($request);
         $modelId = Arr::get($request->getQueryParams(), 'id');
         $data = Arr::get($request->getParsedBody(), 'data', []);
 
         $model = $this->repository->findOrFail($modelId, $actor);
 
-        $actor->assertCan('editAdditionalEmailAddresses', $model->user());
+        if ($model->user()->id !== $actor->id) {
+            throw new \Exception('Cannot update additional email address for another user.');
+        }
 
         $attributes = Arr::get($data, 'attributes', []);
         $relationships = Arr::get($data, 'relationships', []);

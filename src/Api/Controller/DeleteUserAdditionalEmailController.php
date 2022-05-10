@@ -40,15 +40,14 @@ class DeleteUserAdditionalEmailController extends AbstractDeleteController
      */
     protected function delete(ServerRequestInterface $request)
     {
-        // See https://docs.flarum.org/extend/api.html#api-endpoints for more information.
-
         $modelId = Arr::get($request->getQueryParams(), 'id');
         $actor = RequestUtil::getActor($request);
-        // $input = $request->getParsedBody();
 
         $model = $this->repository->findOrFail($modelId, $actor);
 
-        $actor->assertCan('editAdditionalEmailAddresses', $model->user());
+        if ($model->user()->id !== $actor->id) {
+            throw new \Exception('Cannot delete additional email address for another user.');
+        }
 
         $model->deleteOrFail();
     }

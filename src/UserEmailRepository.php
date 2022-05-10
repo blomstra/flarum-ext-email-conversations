@@ -34,24 +34,20 @@ class UserEmailRepository
      */
     public function findOrFail($id, User $actor = null): UserEmail
     {
-        $email = UserEmail::with(['user'])->findOrFail($id);
-
-        $actor->assertCan('viewAdditionalEmailAddresses', $email->user());
-
-        return $email;
+        return UserEmail::with(['user'])->findOrFail($id);
     }
 
     public function findAllForUser(User $user, User $actor = null): Collection
     {
-        $actor->assertCan('viewAdditionalEmailAddresses', $user);
+        if ($user->id === $actor->id) {
+            return UserEmail::with(['user'])->where('user_id', $actor->id)->get();
+        }
 
-        return UserEmail::with(['user'])->where('user_id', $actor->id)->get();
+        return new Collection();
     }
 
     public function getCountForUser(User $user, User $actor = null): int
     {
-        $actor->assertCan('viewAdditionalEmailAddresses', $user);
-
         return UserEmail::where('user_id', $actor->id)->count();
     }
 
