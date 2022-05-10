@@ -1,5 +1,10 @@
 blomstra-post-by-mail:
   admin:
+    settings:
+      maximum_additional_emails_per_user: Maximum number of additional emails for each user
+    permissions:
+      have_additional_emails: Have additional email addresses
+      manage_additional_emails_of_others: Manager other users' additional email addresses
 
   forum:
     profile:

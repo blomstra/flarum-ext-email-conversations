@@ -11,13 +11,13 @@ app.initializers.add('blomstra/post-by-mail', () => {
       type: 'number',
       min: 0,
       max: 100,
-      label: 'Maximum number of additional emails per user',
+      label: app.translator.trans('blomstra-post-by-mail.admin.settings.maximum_additional_emails_per_user'),
       placeholder: '5',
     })
     .registerPermission(
       {
         icon: 'fas fa-mail-bulk',
-        label: 'have additional email addresses',
+        label: app.translator.trans('blomstra-post-by-mail.admin.permissions.have_additional_emails'),
         permission: 'setAdditionalEmail',
       },
       'start'
@@ -25,7 +25,7 @@ app.initializers.add('blomstra/post-by-mail', () => {
     .registerPermission(
       {
         icon: 'fas fa-mail-bulk',
-        label: 'manage other users additional mail addresses',
+        label: app.translator.trans('blomstra-post-by-mail.admin.permissions.manage_additional_emails_of_others'),
         permission: 'viewAdditionalEmailAddresses',
       },
       'moderate'
