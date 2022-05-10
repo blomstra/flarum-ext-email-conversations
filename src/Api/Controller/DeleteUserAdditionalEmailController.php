@@ -45,7 +45,7 @@ class DeleteUserAdditionalEmailController extends AbstractDeleteController
 
         $model = $this->repository->findOrFail($modelId, $actor);
 
-        if ($model->user()->id !== $actor->id) {
+        if ($model->user_id !== $actor->id) {
             throw new \Exception('Cannot delete additional email address for another user.');
         }
 
