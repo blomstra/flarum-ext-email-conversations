@@ -4,6 +4,12 @@
     "keywords": [
         "flarum"
     ],
+    "homepage": "https://blomstra.net",
+    "support": {
+        "source": "https://github.com/blomstra/flarum-ext-post-by-mail",
+        "issues": "https://github.com/blomstra/flarum-ext-post-by-mail/issues",
+        "email": "helpdesk@blomstra.net"
+    },
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
