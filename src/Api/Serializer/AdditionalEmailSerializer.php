@@ -30,7 +30,7 @@ class AdditionalEmailSerializer extends AbstractSerializer
         return [
             'id'          => $additionalEmail->id,
             'email'       => $additionalEmail->email,
-            'isConfirmed' => $additionalEmail->is_confirmed,
+            'is_confirmed' => $additionalEmail->is_confirmed,
             'createdAt'   => $this->formatDate($additionalEmail->created_at),
             'updatedAt'   => $this->formatDate($additionalEmail->updated_at),
         ];
