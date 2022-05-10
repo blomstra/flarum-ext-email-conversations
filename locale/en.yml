@@ -27,3 +27,20 @@ blomstra-post-by-mail:
             email_label: Email address
 
             add_button: Save new email
+  views:
+    confirm_email:
+      text: blah
+
+  email:
+    multi-emails:
+      subject: Confirm your additional email address
+      body: |
+        Hey {display_name},
+
+        Someone just added this email address to their existing account on {forum}.
+
+        If this was you, simply click the following link and this address will be activated:
+        {url}
+
+        If this was not you, please ignore this email.
+        

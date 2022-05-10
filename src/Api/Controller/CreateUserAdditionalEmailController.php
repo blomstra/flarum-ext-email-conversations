@@ -96,7 +96,7 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
 
         $model->saveOrFail();
 
-        $this->events->dispatch(new AdditionalEmailCreated($actor, $model, $data));
+        $this->events->dispatch(new AdditionalEmailCreated($actor, $user, $model, $data));
 
         return $model->load('user');
     }

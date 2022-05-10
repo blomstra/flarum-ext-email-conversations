@@ -53,6 +53,16 @@ return [
         ->post('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.update', Api\Controller\UpdateUserAdditionalEmailController::class)
         ->delete('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.delete', Api\Controller\DeleteUserAdditionalEmailController::class),
 
+    (new Extend\Routes('forum'))
+        ->get('/confirm/additional-email/{token}', 'blomstraPostByEmail.multiEmails.confirm', Api\Controller\ConfirmAdditionalEmailViewController::class)
+        ->post('/confirm/additional-email/{token}', 'blomstraPostByMail.multiEmails.confirm.submit', Api\Controller\ConfirmAdditionalEmailController::class),
+
     (new Extend\Settings())
         ->default('blomstra-post-by-mail.max-additional-emails-count', 5),
+
+    (new Extend\Event())
+        ->subscribe(AdditionalEmailEventSubscriber::class),
+
+    (new Extend\View())
+        ->namespace('blomstra-post-by-mail', __DIR__.'/views'),
 ];

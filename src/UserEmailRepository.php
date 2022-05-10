@@ -11,6 +11,7 @@
 
 namespace Blomstra\PostByMail;
 
+use Flarum\User\EmailToken;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -52,5 +53,16 @@ class UserEmailRepository
         $actor->assertCan('viewAdditionalEmailAddresses', $user);
 
         return UserEmail::where('user_id', $actor->id)->count();
+    }
+
+    public function confirm(EmailToken $token): UserEmail
+    {
+        $userMail = UserEmail::where('email', $token->email)->where('user_id', $token->user_id)->firstOrFail();
+        $userMail->is_confirmed = true;
+        $userMail->save();
+
+        $token->delete();
+
+        return $userMail;
     }
 }

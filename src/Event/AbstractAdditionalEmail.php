@@ -21,7 +21,7 @@ class AbstractAdditionalEmail
      * @param UserEmail $email
      * @param array     $data
      */
-    public function __construct(public User $actor, public UserEmail $email, public array $data = [])
+    public function __construct(public User $actor, public User $user, public UserEmail $additionalEmail, public array $data = [])
     {
     }
 }
