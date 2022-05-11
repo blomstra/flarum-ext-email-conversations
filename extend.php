@@ -13,7 +13,6 @@ namespace Blomstra\PostByMail;
 
 use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
 use Blomstra\PostByMail\Event\EmailReceived;
-use Blomstra\PostByMail\Listener;
 use Blomstra\PostByMail\Provider\MailgunProvider;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
@@ -21,7 +20,6 @@ use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
 use Flarum\Post\Event\Saving as PostSaving;
-use Flarum\Post\Post;
 use Flarum\User\User;
 
 return [
@@ -83,7 +81,6 @@ return [
     (new Extend\ServiceProvider())
         ->register(MailgunProvider::class),
 
-
     (new Extend\ApiSerializer(PostSerializer::class))
-        ->attributes(AddPostAttributes::class)
+        ->attributes(AddPostAttributes::class),
 ];

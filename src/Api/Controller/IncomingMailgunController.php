@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of blomstra/post-by-mail.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\PostByMail\Api\Controller;
 
 use Blomstra\PostByMail\Event\EmailReceived;
@@ -69,7 +78,7 @@ class IncomingMailgunController implements RequestHandlerInterface
     private function isValidSignature(ServerRequestInterface $request): bool
     {
         $body = $request->getParsedBody();
-        
+
         $timestamp = Arr::get($body, 'timestamp');
         $token = Arr::get($body, 'token');
         $signature = Arr::get($body, 'signature');

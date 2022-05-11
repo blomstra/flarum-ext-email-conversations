@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of blomstra/post-by-mail.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\PostByMail\Jobs;
 
 use Blomstra\PostByMail\UserEmail;
@@ -51,20 +60,20 @@ class ProcessReceivedEmail extends Job
     {
         $data = [
             'attributes' => [
-                'title' => $message->getSubject(),
+                'title'   => $message->getSubject(),
                 'content' => $message->getStrippedText(),
-                'source' => $message->getSender()
+                'source'  => $message->getSender(),
             ],
             'relationships' => [
                 'tags' => [
                     'data' => [
                         [
-                            'id' => $tag->id,
+                            'id'   => $tag->id,
                             'type' => 'tags',
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         /** @var Discussion $discussion */
