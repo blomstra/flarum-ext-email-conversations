@@ -12,10 +12,16 @@
 namespace Blomstra\PostByMail;
 
 use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\PostByMail\Event\EmailReceived;
+use Blomstra\PostByMail\Listener;
+use Blomstra\PostByMail\Provider\MailgunProvider;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
+use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
+use Flarum\Post\Event\Saving as PostSaving;
+use Flarum\Post\Post;
 use Flarum\User\User;
 
 return [
@@ -53,7 +59,8 @@ return [
         ->get('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.list', Api\Controller\ListUserAdditionalEmailsController::class)
         ->post('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.create', Api\Controller\CreateUserAdditionalEmailController::class)
         ->post('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.update', Api\Controller\UpdateUserAdditionalEmailController::class)
-        ->delete('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.delete', Api\Controller\DeleteUserAdditionalEmailController::class),
+        ->delete('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.delete', Api\Controller\DeleteUserAdditionalEmailController::class)
+        ->post('/email/receive', 'blomstraPostByMail.incoming.receive', Api\Controller\IncomingMailgunController::class),
 
     (new Extend\Routes('forum'))
         ->get('/confirm/additional-email/{token}', 'blomstraPostByEmail.multiEmails.confirm', Api\Controller\ConfirmAdditionalEmailViewController::class)
@@ -63,8 +70,20 @@ return [
         ->default('blomstra-post-by-mail.max-additional-emails-count', 5),
 
     (new Extend\Event())
-        ->subscribe(AdditionalEmailEventSubscriber::class),
+        ->subscribe(AdditionalEmailEventSubscriber::class)
+        ->listen(EmailReceived::class, Listener\ReceivedEmailListener::class)
+        ->listen(PostSaving::class, Listener\SavePostSourceToDatabase::class),
 
     (new Extend\View())
         ->namespace('blomstra-post-by-mail', __DIR__.'/views'),
+
+    (new Extend\Csrf())
+        ->exemptRoute('blomstraPostByMail.incoming.receive'),
+
+    (new Extend\ServiceProvider())
+        ->register(MailgunProvider::class),
+
+
+    (new Extend\ApiSerializer(PostSerializer::class))
+        ->attributes(AddPostAttributes::class)
 ];
