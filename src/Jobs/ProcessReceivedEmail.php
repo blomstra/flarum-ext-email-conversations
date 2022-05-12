@@ -49,7 +49,7 @@ class ProcessReceivedEmail extends Job
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            $additional = UserEmail::where('email', $email)->first();
+            $additional = UserEmail::where('email', $email)->where('is_confirmed', 1)->first();
             $user = User::find($additional->user_id);
         }
 
