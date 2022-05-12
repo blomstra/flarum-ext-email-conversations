@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of blomstra/post-by-mail.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\PostByMail;
 
 use Flarum\Discussion\Discussion;
@@ -19,22 +28,22 @@ class NotificationMailerWithId extends NotificationMailer
      * @var ViewFactory
      */
     protected $view;
-    
+
     public function __construct(Mailer $mailer, TranslatorInterface $translator, ViewFactory $view)
     {
         parent::__construct($mailer, $translator);
 
         $this->view = $view;
     }
-    
+
     /**
      * @param MailableInterface $blueprint
-     * @param User $user
+     * @param User              $user
      */
     public function send(MailableInterface $blueprint, User $user)
     {
         $view = $this->addIdToContent(Str::random(10), $blueprint, $user);
-        
+
         $this->mailer->raw(
             $view,
             function (Message $message) use ($blueprint, $user) {
@@ -55,12 +64,12 @@ class NotificationMailerWithId extends NotificationMailer
         if ($subjectContext instanceof CommentPost || $subjectContext instanceof Discussion) {
             $discussionId = ($subjectContext instanceof CommentPost) ? $subjectContext->discussion->id : $subjectContext->id;
             $data = [
-                'user'       => $user,
-                'blueprint'  => $blueprint,
-                'notificationId' => "#$id?$discussionId#"
+                'user'           => $user,
+                'blueprint'      => $blueprint,
+                'notificationId' => "#$id?$discussionId#",
             ];
-    
-            return BladeCompiler::render('{!! $body !!}' . "\n\n" . 'Notification ID: {!! $notificationId !!}' . "\n", array_merge($data, [
+
+            return BladeCompiler::render('{!! $body !!}'."\n\n".'Notification ID: {!! $notificationId !!}'."\n", array_merge($data, [
                 'body' => $body,
             ]));
         }

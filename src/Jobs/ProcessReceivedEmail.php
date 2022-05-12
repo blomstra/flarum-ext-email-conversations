@@ -53,11 +53,11 @@ class ProcessReceivedEmail extends Job
                 $this->replyToDiscussion($message, $user, $discussion);
             } else {
                 //start new discussion
-                $this->logger->info("Starting new discussion");
+                $this->logger->info('Starting new discussion');
                 $this->startNewDiscussion($message, $user, $tag);
             }
         } else {
-            $this->logger->info("No user or tag found");
+            $this->logger->info('No user or tag found');
         }
     }
 
@@ -114,10 +114,10 @@ class ProcessReceivedEmail extends Job
     {
         $data = [
             'attributes' => [
-                'content' => $message->getStrippedText(),
+                'content'      => $message->getStrippedText(),
                 'source'       => 'blomstra-post-by-mail',
                 'source-data'  => $message->getSender(),
-            ]
+            ],
         ];
 
         resolve(Dispatcher::class)->dispatch(new PostReply($discussion->id, $actor, $data, '127.0.0.1'));
