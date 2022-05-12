@@ -37,17 +37,13 @@ class ProcessReceivedEmail extends Job
         /** @var ShowResponse $message */
         $message = $this->mailgun->messages()->show($this->messageUrl);
 
-        $from = $message->getSender();
-
-        $user = $this->findUser($from);
+        $user = $this->findUser($message->getSender());
         $tag = Tag::where('slug', $settings->get('blomstra-post-by-mail.tag-slug'))->first();
 
         if ($user && $tag) {
-            //TODO inspect the message and decide if this is a new discussion or reply to existing
 
-            if ($discussionId = $this->determineDiscussionId($message)) {
+            if ($discussion = $this->determineDiscussion($message)) {
                 //reply to existing discussion
-                $discussion = Discussion::find($discussionId);
 
                 $this->logger->info("Replying to discussion $discussion->id");
                 $this->replyToDiscussion($message, $user, $discussion);
@@ -73,14 +69,22 @@ class ProcessReceivedEmail extends Job
         return $user;
     }
 
-    private function determineDiscussionId(ShowResponse $message): ?int
+    private function determineDiscussion(ShowResponse $message): ?Discussion
     {
         $content = $message->getBodyPlain();
         $matches = null;
 
         preg_match('/#(?:\w{10})\?(\d*)#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
 
-        return $matches[1];
+        return Discussion::find($matches[1]);
+    }
+
+    private function getPostContent(ShowResponse $message): string
+    {
+        //TODO HTML -> markdown conversion
+        //TODO extract other recipients from the email and add them as @mentions in the post content
+        
+        return $message->getStrippedText();
     }
 
     private function startNewDiscussion(ShowResponse $message, User $actor, Tag $tag): void
@@ -88,7 +92,7 @@ class ProcessReceivedEmail extends Job
         $data = [
             'attributes' => [
                 'title'        => $message->getSubject(),
-                'content'      => $message->getStrippedText(),
+                'content'      => $this->getPostContent($message),
                 'source'       => 'blomstra-post-by-mail',
                 'source-data'  => $message->getSender(),
             ],
@@ -108,13 +112,15 @@ class ProcessReceivedEmail extends Job
         $discussion = resolve(Dispatcher::class)->dispatch(new StartDiscussion($actor, $data, '127.0.0.1'));
 
         //TODO subscribe all email recipients to the discussion
+
+        //TODO mark the new discussion as awaiting approval
     }
 
     private function replyToDiscussion(ShowResponse $message, User $actor, Discussion $discussion): void
     {
         $data = [
             'attributes' => [
-                'content'      => $message->getStrippedText(),
+                'content'      => $this->getPostContent($message),
                 'source'       => 'blomstra-post-by-mail',
                 'source-data'  => $message->getSender(),
             ],
