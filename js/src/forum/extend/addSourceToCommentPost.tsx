@@ -16,6 +16,10 @@ export default function addSourceToCommentPost() {
         const source = this.attrs.post.source();
         const sourceData = this.attrs.post.sourceData();
 
+        if (!source) {
+            return;
+        }
+
         const displayText = app.translator.trans('blomstra-post-by-mail.forum.post.source');
         const className = 'PostedByEmail';
 
