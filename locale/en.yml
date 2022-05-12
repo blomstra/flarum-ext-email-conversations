@@ -8,7 +8,7 @@ blomstra-post-by-mail:
 
   forum:
     post:
-      source: Posted via email
+      source: via email
     profile:
       settings:
         multi-email:
