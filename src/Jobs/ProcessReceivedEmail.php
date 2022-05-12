@@ -41,7 +41,6 @@ class ProcessReceivedEmail extends Job
         $tag = Tag::where('slug', $settings->get('blomstra-post-by-mail.tag-slug'))->first();
 
         if ($user && $tag) {
-
             if ($discussion = $this->determineDiscussion($message)) {
                 //reply to existing discussion
 
@@ -83,7 +82,7 @@ class ProcessReceivedEmail extends Job
     {
         //TODO HTML -> markdown conversion
         //TODO extract other recipients from the email and add them as @mentions in the post content
-        
+
         return $message->getStrippedText();
     }
 
