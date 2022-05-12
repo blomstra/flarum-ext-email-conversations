@@ -11,7 +11,9 @@
 
 namespace Blomstra\PostByMail\Provider;
 
+use Blomstra\PostByMail\NotificationMailerWithId;
 use Flarum\Foundation\AbstractServiceProvider;
+use Flarum\Notification\NotificationMailer;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Mailgun\Mailgun;
 
@@ -24,6 +26,14 @@ class MailgunProvider extends AbstractServiceProvider
             $settings = resolve('flarum.settings');
 
             return Mailgun::create($settings->get('blomstra.post-by-mail.mailgun-private-key'));
+        });
+
+        // $this->container->bind(NotificationMailer::class, function () {
+        //     return resolve(NotificationMailerWithId::class);
+        // });
+
+        $this->container->extend(NotificationMailer::class, function () {
+            return resolve(NotificationMailerWithId::class);
         });
     }
 }

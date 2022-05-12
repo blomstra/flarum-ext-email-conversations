@@ -14,6 +14,7 @@ namespace Blomstra\PostByMail\Jobs;
 use Blomstra\PostByMail\UserEmail;
 use Flarum\Discussion\Command\StartDiscussion;
 use Flarum\Discussion\Discussion;
+use Flarum\Post\Command\PostReply;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
@@ -22,9 +23,13 @@ use Mailgun\Model\Message\ShowResponse;
 
 class ProcessReceivedEmail extends Job
 {
+    protected $logger;
+
     public function handle()
     {
         $this->mailgun = resolve('blomstra.mailgun');
+
+        $this->logger = resolve('log');
 
         /** @var SettingsRepositoryInterface $settings */
         $settings = resolve('flarum.settings');
@@ -40,7 +45,19 @@ class ProcessReceivedEmail extends Job
         if ($user && $tag) {
             //TODO inspect the message and decide if this is a new discussion or reply to existing
 
-            $this->startNewDiscussion($message, $user, $tag);
+            if ($discussionId = $this->determineDiscussionId($message)) {
+                //reply to existing discussion
+                $discussion = Discussion::find($discussionId);
+
+                $this->logger->info("Replying to discussion $discussion->id");
+                $this->replyToDiscussion($message, $user, $discussion);
+            } else {
+                //start new discussion
+                $this->logger->info("Starting new discussion");
+                $this->startNewDiscussion($message, $user, $tag);
+            }
+        } else {
+            $this->logger->info("No user or tag found");
         }
     }
 
@@ -54,6 +71,16 @@ class ProcessReceivedEmail extends Job
         }
 
         return $user;
+    }
+
+    private function determineDiscussionId(ShowResponse $message): ?int
+    {
+        $content = $message->getBodyPlain();
+        $matches = null;
+
+        preg_match('/#(?:\w{10})\?(\d*)#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
+
+        return $matches[1];
     }
 
     private function startNewDiscussion(ShowResponse $message, User $actor, Tag $tag): void
@@ -81,5 +108,18 @@ class ProcessReceivedEmail extends Job
         $discussion = resolve(Dispatcher::class)->dispatch(new StartDiscussion($actor, $data, '127.0.0.1'));
 
         //TODO subscribe all email recipients to the discussion
+    }
+
+    private function replyToDiscussion(ShowResponse $message, User $actor, Discussion $discussion): void
+    {
+        $data = [
+            'attributes' => [
+                'content' => $message->getStrippedText(),
+                'source'       => 'blomstra-post-by-mail',
+                'source-data'  => $message->getSender(),
+            ]
+        ];
+
+        resolve(Dispatcher::class)->dispatch(new PostReply($discussion->id, $actor, $data, '127.0.0.1'));
     }
 }
