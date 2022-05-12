@@ -17,19 +17,20 @@ export default function addSourceToCommentPost() {
         const sourceData = this.attrs.post.sourceData();
 
         const displayText = app.translator.trans('blomstra-post-by-mail.forum.post.source');
+        const className = 'PostedByEmail';
 
         let element;
 
         if (source === 'blomstra-post-by-mail' && !sourceData) {
             element = (
-                <div>{displayText}</div>
+                <span className={className}>{displayText}</span>
             )
         } else {
             element = (
-                <Tooltip text={sourceData}><div>{displayText}</div></Tooltip>
+                <Tooltip text={sourceData}><span className={className}>{displayText}</span></Tooltip>
             )
         }
 
-        items.add('source', element)
+        items.add('source', element, 90)
     })
 }
