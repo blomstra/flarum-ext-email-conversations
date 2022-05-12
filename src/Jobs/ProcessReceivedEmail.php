@@ -62,7 +62,8 @@ class ProcessReceivedEmail extends Job
             'attributes' => [
                 'title'   => $message->getSubject(),
                 'content' => $message->getStrippedText(),
-                'source'  => $message->getSender(),
+                'source' => 'blomstra-post-by-mail',
+                'source-data'  => $message->getSender(),
             ],
             'relationships' => [
                 'tags' => [

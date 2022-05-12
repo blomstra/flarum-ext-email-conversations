@@ -7,6 +7,8 @@ blomstra-post-by-mail:
       manage_additional_emails_of_others: Manager other users' additional email addresses
 
   forum:
+    post:
+      source: Posted via email
     profile:
       settings:
         multi-email:
