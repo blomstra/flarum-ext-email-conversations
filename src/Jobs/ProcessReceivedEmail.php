@@ -60,9 +60,9 @@ class ProcessReceivedEmail extends Job
     {
         $data = [
             'attributes' => [
-                'title'   => $message->getSubject(),
-                'content' => $message->getStrippedText(),
-                'source' => 'blomstra-post-by-mail',
+                'title'        => $message->getSubject(),
+                'content'      => $message->getStrippedText(),
+                'source'       => 'blomstra-post-by-mail',
                 'source-data'  => $message->getSender(),
             ],
             'relationships' => [
