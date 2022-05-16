@@ -29,7 +29,7 @@ export default class SettingsPage extends ExtensionPage {
         <div className="EmailConversationsSettingsPage">
           <div className="EmailConversations-content">
             {this.buildSettingComponent({
-              setting: 'blomstra-post-by-mail.max-additional-emails-count',
+              setting: 'blomstra-email-conversations.max-additional-emails-count',
               type: 'number',
               min: 0,
               max: 100,

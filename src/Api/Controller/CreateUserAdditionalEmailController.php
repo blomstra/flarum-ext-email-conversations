@@ -88,7 +88,7 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
         $this->validator->assertValid($model->getAttributes());
 
         $existingCount = $this->repository->getCountForUser($user, $actor);
-        $maxCount = $this->settings->get('blomstra-post-by-mail.max-additional-emails-count', 5);
+        $maxCount = $this->settings->get('blomstra-email-conversations.max-additional-emails-count', 5);
 
         if ($existingCount >= $maxCount) {
             throw new \Flarum\Foundation\ValidationException(['You may only have a maximum of '.$maxCount.' additional email addresses.']);
