@@ -1,3 +1,9 @@
+blomstra-conversations:
+  forum:
+    post:
+      source:
+        blomstra-email-conversations: via email
+
 blomstra-email-conversations:
   admin:
     settings:
