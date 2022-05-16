@@ -12,17 +12,16 @@
 namespace Blomstra\EmailConversations\Jobs;
 
 use Blomstra\EmailConversations\UserEmail;
-use Flarum\Discussion\Command\StartDiscussion;
 use Flarum\Discussion\Discussion;
-use Flarum\Post\Command\PostReply;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
-use Illuminate\Contracts\Bus\Dispatcher;
 use Mailgun\Model\Message\ShowResponse;
 
-class ProcessReceivedEmail extends Job
+class ProcessReceivedEmail extends EmailConversationJob
 {
+    protected string $sourceId = 'blomstra-email-conversations';
+    
     protected $logger;
 
     public function handle()
@@ -88,28 +87,14 @@ class ProcessReceivedEmail extends Job
 
     private function startNewDiscussion(ShowResponse $message, User $actor, Tag $tag): void
     {
-        $data = [
-            'attributes' => [
-                'title'        => $message->getSubject(),
-                'content'      => $this->getPostContent($message),
-                'source'       => 'blomstra-email-conversations',
-                'source-data'  => $message->getSender(),
-            ],
-            'relationships' => [
-                'tags' => [
-                    'data' => [
-                        [
-                            'id'   => $tag->id,
-                            'type' => 'tags',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        /** @var Discussion $discussion */
-        $discussion = resolve(Dispatcher::class)->dispatch(new StartDiscussion($actor, $data, '127.0.0.1'));
-
+        $discussion = $this->startDiscussionFromSource(
+            $message->getSubject(), 
+            $this->getPostContent($message), 
+            $actor, 
+            $this->sourceId,
+            $message->getSender(),
+            $tag
+        );
         //TODO subscribe all email recipients to the discussion
 
         //TODO mark the new discussion as awaiting approval
@@ -117,14 +102,11 @@ class ProcessReceivedEmail extends Job
 
     private function replyToDiscussion(ShowResponse $message, User $actor, Discussion $discussion): void
     {
-        $data = [
-            'attributes' => [
-                'content'      => $this->getPostContent($message),
-                'source'       => 'blomstra-email-conversations',
-                'source-data'  => $message->getSender(),
-            ],
-        ];
-
-        resolve(Dispatcher::class)->dispatch(new PostReply($discussion->id, $actor, $data, '127.0.0.1'));
+        $post = $this->replyToDiscussionFromSource(
+            $discussion, 
+            $this->getPostContent($message), 
+            $actor, 
+            $this->sourceId, 
+            $message->getSender());
     }
 }

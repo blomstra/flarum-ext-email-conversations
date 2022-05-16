@@ -53,8 +53,6 @@ class IncomingMailgunController implements RequestHandlerInterface
         $this->settings = $settings;
         $this->url = $url;
         $this->events = $events;
-
-        $this->mailgun = resolve('blomstra.mailgun');
     }
 
     /**
@@ -66,6 +64,8 @@ class IncomingMailgunController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $this->mailgun = resolve('blomstra.mailgun');
+        
         if (!$this->isValidSignature($request)) {
             return new EmptyResponse(406);
         }

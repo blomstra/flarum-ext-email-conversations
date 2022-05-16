@@ -12,7 +12,7 @@
 namespace Blomstra\EmailConversations\Listener;
 
 use Blomstra\EmailConversations\Event\EmailReceived;
-use Blomstra\EmailConversations\Jobs\Job;
+use Blomstra\EmailConversations\Jobs\EmailConversationJob;
 use Blomstra\EmailConversations\Jobs\ProcessReceivedEmail;
 use Illuminate\Contracts\Queue\Queue;
 
@@ -27,6 +27,6 @@ class ReceivedEmailListener
         /** @var Queue */
         $queue = resolve('flarum.queue.connection');
 
-        $queue->pushOn(Job::$onQueue, new ProcessReceivedEmail($event->messageUrl));
+        $queue->pushOn(EmailConversationJob::$onQueue, new ProcessReceivedEmail($event->messageUrl));
     }
 }

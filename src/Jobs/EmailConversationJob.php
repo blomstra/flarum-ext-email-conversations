@@ -11,19 +11,15 @@
 
 namespace Blomstra\EmailConversations\Jobs;
 
-use Flarum\Queue\AbstractJob;
+use Blomstra\Conversations\Job\ConversationJob;
 use Mailgun\Mailgun;
 
-class Job extends AbstractJob
+class EmailConversationJob extends ConversationJob
 {
-    public static ?string $onQueue = null;
-
     public ?Mailgun $mailgun = null;
 
     public function __construct(protected string $messageUrl)
     {
-        if (static::$onQueue) {
-            $this->onQueue(static::$onQueue);
-        }
+        parent::__construct();
     }
 }
