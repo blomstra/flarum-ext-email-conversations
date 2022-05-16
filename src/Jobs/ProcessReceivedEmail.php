@@ -21,7 +21,7 @@ use Mailgun\Model\Message\ShowResponse;
 class ProcessReceivedEmail extends EmailConversationJob
 {
     protected string $sourceId = 'blomstra-email-conversations';
-    
+
     protected $logger;
 
     public function handle()
@@ -88,9 +88,9 @@ class ProcessReceivedEmail extends EmailConversationJob
     private function startNewDiscussion(ShowResponse $message, User $actor, Tag $tag): void
     {
         $discussion = $this->startDiscussionFromSource(
-            $message->getSubject(), 
-            $this->getPostContent($message), 
-            $actor, 
+            $message->getSubject(),
+            $this->getPostContent($message),
+            $actor,
             $this->sourceId,
             $message->getSender(),
             $tag
@@ -103,10 +103,11 @@ class ProcessReceivedEmail extends EmailConversationJob
     private function replyToDiscussion(ShowResponse $message, User $actor, Discussion $discussion): void
     {
         $post = $this->replyToDiscussionFromSource(
-            $discussion, 
-            $this->getPostContent($message), 
-            $actor, 
-            $this->sourceId, 
-            $message->getSender());
+            $discussion,
+            $this->getPostContent($message),
+            $actor,
+            $this->sourceId,
+            $message->getSender()
+        );
     }
 }

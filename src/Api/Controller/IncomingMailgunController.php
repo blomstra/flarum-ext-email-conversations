@@ -65,7 +65,7 @@ class IncomingMailgunController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->mailgun = resolve('blomstra.mailgun');
-        
+
         if (!$this->isValidSignature($request)) {
             return new EmptyResponse(406);
         }
