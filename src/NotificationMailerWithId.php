@@ -66,10 +66,10 @@ class NotificationMailerWithId extends NotificationMailer
             $data = [
                 'user'           => $user,
                 'blueprint'      => $blueprint,
-                'notificationId' => '#' . $this->getNotificationIdForDiscussion($discussion) . '#',
+                'notificationId' => '#'.$this->getNotificationIdForDiscussion($discussion).'#',
             ];
 
-            return BladeCompiler::render('{!! $body !!}' . "\n\n" . 'Notification ID: {!! $notificationId !!}' . "\n", array_merge($data, [
+            return BladeCompiler::render('{!! $body !!}'."\n\n".'Notification ID: {!! $notificationId !!}'."\n", array_merge($data, [
                 'body' => $body,
             ]));
         }
@@ -83,6 +83,7 @@ class NotificationMailerWithId extends NotificationMailer
      * than using the discussion ID.
      *
      * @param Discussion $discussion
+     *
      * @return string
      */
     private function getNotificationIdForDiscussion(Discussion $discussion): string
