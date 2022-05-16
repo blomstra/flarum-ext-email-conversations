@@ -72,9 +72,13 @@ class ProcessReceivedEmail extends EmailConversationJob
         $content = $message->getBodyPlain();
         $matches = null;
 
-        preg_match('/#(?:\w{10})\?(\d*)#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
+        preg_match('/#(\w{40})#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
 
-        return Discussion::find($matches[1]);
+        if ($matches[1] === null) {
+            return null;
+        }
+
+        return Discussion::where('notification_id', $matches[1])->first();
     }
 
     private function getPostContent(ShowResponse $message): string

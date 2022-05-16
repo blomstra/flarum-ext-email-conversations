@@ -42,7 +42,7 @@ class NotificationMailerWithId extends NotificationMailer
      */
     public function send(MailableInterface $blueprint, User $user)
     {
-        $view = $this->addIdToContent(Str::random(10), $blueprint, $user);
+        $view = $this->addIdToContent($blueprint, $user);
 
         $this->mailer->raw(
             $view,
@@ -53,7 +53,7 @@ class NotificationMailerWithId extends NotificationMailer
         );
     }
 
-    private function addIdToContent(string $id, MailableInterface $blueprint, User $user): string
+    private function addIdToContent(MailableInterface $blueprint, User $user): string
     {
         $viewName = $blueprint->getEmailView()['text'] ?? null;
 
@@ -62,18 +62,36 @@ class NotificationMailerWithId extends NotificationMailer
         $body = $this->view->make($viewName, compact('blueprint', 'user'))->render();
 
         if ($subjectContext instanceof CommentPost || $subjectContext instanceof Discussion) {
-            $discussionId = ($subjectContext instanceof CommentPost) ? $subjectContext->discussion->id : $subjectContext->id;
+            $discussion = ($subjectContext instanceof CommentPost) ? $subjectContext->discussion : $subjectContext;
             $data = [
                 'user'           => $user,
                 'blueprint'      => $blueprint,
-                'notificationId' => "#$id?$discussionId#",
+                'notificationId' => '#' . $this->getNotificationIdForDiscussion($discussion) . '#',
             ];
 
-            return BladeCompiler::render('{!! $body !!}'."\n\n".'Notification ID: {!! $notificationId !!}'."\n", array_merge($data, [
+            return BladeCompiler::render('{!! $body !!}' . "\n\n" . 'Notification ID: {!! $notificationId !!}' . "\n", array_merge($data, [
                 'body' => $body,
             ]));
         }
 
         return $body;
+    }
+
+    /**
+     * To prevent cross-posting by manipulating the Notification ID, we generate a 40 character string and
+     * store in on the discussion table. This is used by the email processor to identify the discussion, rather
+     * than using the discussion ID.
+     *
+     * @param Discussion $discussion
+     * @return string
+     */
+    private function getNotificationIdForDiscussion(Discussion $discussion): string
+    {
+        if (!$discussion->notification_id) {
+            $discussion->notification_id = Str::random(40);
+            $discussion->save();
+        }
+
+        return $discussion->notification_id;
     }
 }
