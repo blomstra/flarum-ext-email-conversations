@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -16,10 +16,8 @@ use Blomstra\EmailConversations\Event\EmailReceived;
 use Blomstra\EmailConversations\Provider\MailgunProvider;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
-use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
-use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\User\User;
 
 return [
@@ -80,5 +78,4 @@ return [
     (new Extend\ServiceProvider())
         ->register(MailgunProvider::class),
 
-    
 ];
