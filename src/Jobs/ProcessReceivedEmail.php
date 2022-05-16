@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Jobs;
+namespace Blomstra\EmailConversations\Jobs;
 
-use Blomstra\PostByMail\UserEmail;
+use Blomstra\EmailConversations\UserEmail;
 use Flarum\Discussion\Command\StartDiscussion;
 use Flarum\Discussion\Discussion;
 use Flarum\Post\Command\PostReply;
@@ -38,7 +38,7 @@ class ProcessReceivedEmail extends Job
         $message = $this->mailgun->messages()->show($this->messageUrl);
 
         $user = $this->findUser($message->getSender());
-        $tag = Tag::where('slug', $settings->get('blomstra-post-by-mail.tag-slug'))->first();
+        $tag = Tag::where('slug', $settings->get('blomstra-email-conversations.tag-slug'))->first();
 
         if ($user && $tag) {
             if ($discussion = $this->determineDiscussion($message)) {
@@ -92,7 +92,7 @@ class ProcessReceivedEmail extends Job
             'attributes' => [
                 'title'        => $message->getSubject(),
                 'content'      => $this->getPostContent($message),
-                'source'       => 'blomstra-post-by-mail',
+                'source'       => 'blomstra-email-conversations',
                 'source-data'  => $message->getSender(),
             ],
             'relationships' => [
@@ -120,7 +120,7 @@ class ProcessReceivedEmail extends Job
         $data = [
             'attributes' => [
                 'content'      => $this->getPostContent($message),
-                'source'       => 'blomstra-post-by-mail',
+                'source'       => 'blomstra-email-conversations',
                 'source-data'  => $message->getSender(),
             ],
         ];

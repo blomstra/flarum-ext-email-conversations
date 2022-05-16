@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Command;
+namespace Blomstra\EmailConversations\Command;
 
-use Blomstra\PostByMail\UserEmailRepository;
+use Blomstra\EmailConversations\UserEmailRepository;
 use Flarum\User\EmailToken;
 
 class ConfirmAdditionalEmailHandler

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Controller;
+namespace Blomstra\EmailConversations\Api\Controller;
 
 use Flarum\Http\Controller\AbstractHtmlController;
 use Flarum\User\EmailToken;
@@ -43,7 +43,7 @@ class ConfirmAdditionalEmailViewController extends AbstractHtmlController
 
         $token = EmailToken::validOrFail($token);
 
-        return $this->view->make('blomstra-post-by-mail::confirm-additional-email')
+        return $this->view->make('blomstra-email-conversations::confirm-additional-email')
             ->with('csrfToken', $request->getAttribute('session')->token());
     }
 }

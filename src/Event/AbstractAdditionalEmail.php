@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Event;
+namespace Blomstra\EmailConversations\Event;
 
-use Blomstra\PostByMail\UserEmail;
+use Blomstra\EmailConversations\UserEmail;
 use Flarum\User\User;
 
 class AbstractAdditionalEmail

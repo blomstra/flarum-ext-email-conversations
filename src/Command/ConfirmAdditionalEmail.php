@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Command;
+namespace Blomstra\EmailConversations\Command;
 
 class ConfirmAdditionalEmail
 {

@@ -2,16 +2,16 @@ import app from 'flarum/admin/app';
 import commonInit from '../common';
 import SettingsPage from './components/SettingsPage';
 
-app.initializers.add('blomstra/post-by-mail', () => {
+app.initializers.add('blomstra/email-conversations', () => {
   commonInit();
 
   app.extensionData
-    .for('blomstra-post-by-mail')
+    .for('blomstra-email-conversations')
     .registerPage(SettingsPage)
     .registerPermission(
       {
         icon: 'fas fa-mail-bulk',
-        label: app.translator.trans('blomstra-post-by-mail.admin.permissions.have_additional_emails'),
+        label: app.translator.trans('blomstra-email-conversations.admin.permissions.have_additional_emails'),
         permission: 'haveAdditionalEmail',
       },
       'start'
@@ -21,7 +21,7 @@ app.initializers.add('blomstra/post-by-mail', () => {
   // .registerPermission(
   //   {
   //     icon: 'fas fa-mail-bulk',
-  //     label: app.translator.trans('blomstra-post-by-mail.admin.permissions.manage_additional_emails_of_others'),
+  //     label: app.translator.trans('blomstra-conversations-emailadmin.permissions.manage_additional_emails_of_others'),
   //     permission: 'viewAdditionalEmailAddresses',
   //   },
   //   'moderate'

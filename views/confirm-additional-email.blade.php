@@ -16,7 +16,7 @@
     <form class="form" method="POST" action="">
         <input type="hidden" name="csrfToken" value="{{ $csrfToken }}" />
 
-        <p>{{ $translator->trans('blomstra-post-by-mail.views.confirm_email.text') }}</p>
+        <p>{{ $translator->trans('blomstra-email-conversations.views.confirm_email.text') }}</p>
 
         <p class="form-group">
             <button type="submit" class="button">{{ $translator->trans('core.views.confirm_email.submit_button') }}</button>

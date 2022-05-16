@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Serializer;
+namespace Blomstra\EmailConversations\Api\Serializer;
 
-use Blomstra\PostByMail\UserEmail;
+use Blomstra\EmailConversations\UserEmail;
 use Flarum\Api\Serializer\AbstractSerializer;
 use Flarum\Api\Serializer\BasicUserSerializer;
 

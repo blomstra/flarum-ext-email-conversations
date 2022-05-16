@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail;
+namespace Blomstra\EmailConversations;
 
-use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
-use Blomstra\PostByMail\Event\EmailReceived;
-use Blomstra\PostByMail\Provider\MailgunProvider;
+use Blomstra\EmailConversations\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\EmailConversations\Event\EmailReceived;
+use Blomstra\EmailConversations\Provider\MailgunProvider;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\PostSerializer;
@@ -65,15 +65,14 @@ return [
         ->post('/confirm/additional-email/{token}', 'blomstraPostByMail.multiEmails.confirm.submit', Api\Controller\ConfirmAdditionalEmailController::class),
 
     (new Extend\Settings())
-        ->default('blomstra-post-by-mail.max-additional-emails-count', 5),
+        ->default('blomstra-email-conversations.max-additional-emails-count', 5),
 
     (new Extend\Event())
         ->subscribe(AdditionalEmailEventSubscriber::class)
-        ->listen(EmailReceived::class, Listener\ReceivedEmailListener::class)
-        ->listen(PostSaving::class, Listener\SavePostSourceToDatabase::class),
+        ->listen(EmailReceived::class, Listener\ReceivedEmailListener::class),
 
     (new Extend\View())
-        ->namespace('blomstra-post-by-mail', __DIR__.'/views'),
+        ->namespace('blomstra-email-conversations', __DIR__.'/views'),
 
     (new Extend\Csrf())
         ->exemptRoute('blomstraPostByMail.incoming.receive'),
@@ -81,6 +80,5 @@ return [
     (new Extend\ServiceProvider())
         ->register(MailgunProvider::class),
 
-    (new Extend\ApiSerializer(PostSerializer::class))
-        ->attributes(AddPostAttributes::class),
+    
 ];

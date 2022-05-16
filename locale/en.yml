@@ -1,4 +1,4 @@
-blomstra-post-by-mail:
+blomstra-email-conversations:
   admin:
     settings:
       maximum_additional_emails_per_user: Maximum number of additional emails for each user

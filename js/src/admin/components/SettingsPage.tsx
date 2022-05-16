@@ -21,36 +21,36 @@ export default class SettingsPage extends ExtensionPage {
           acc[curr.slug()] = curr.name() + ' (' + curr.slug() + ')';
           return acc;
         },
-        { '': app.translator.trans('blomstra-post-by-mail.settings.email_post_tag_none') }
+        { '': app.translator.trans('blomstra-email-conversations.admin.settings.email_post_tag_none') }
       );
 
     return (
       <div className="container">
-        <div className="PostByMailSettingsPage">
-          <div className="PostByMailSettingsPage-content">
+        <div className="EmailConversationsSettingsPage">
+          <div className="EmailConversations-content">
             {this.buildSettingComponent({
               setting: 'blomstra-post-by-mail.max-additional-emails-count',
               type: 'number',
               min: 0,
               max: 100,
-              label: app.translator.trans('blomstra-post-by-mail.admin.settings.maximum_additional_emails_per_user'),
+              label: app.translator.trans('blomstra-email-conversations.admin.settings.maximum_additional_emails_per_user'),
               placeholder: '5',
             })}
             {this.buildSettingComponent({
-              setting: 'blomstra.post-by-mail.mailgun-private-key',
+              setting: 'blomstra.email-conversations.mailgun-private-key',
               type: 'text',
               label: 'Mailgun private api key',
             })}
             {this.buildSettingComponent({
-              setting: 'blomstra.post-by-mail.webhook-signing-key',
+              setting: 'blomstra.email-conversations.mailgun.webhook-signing-key',
               type: 'text',
               label: 'Mailgun webhook signing key',
             })}
             {this.buildSettingComponent({
-              label: app.translator.trans('blomstra-post-by-mail.settings.email_post_tag'),
-              help: app.translator.trans('blomstra-post-by-mail.settings.gemail_post_tag_help'),
+              label: app.translator.trans('blomstra-email-conversations.admin.settings.email_post_tag'),
+              help: app.translator.trans('blomstra-email-conversations.admin.settings.email_post_tag_help'),
               type: 'select',
-              setting: 'blomstra-post-by-mail.tag-slug',
+              setting: 'blomstra-email-conversations.tag-slug',
               options: tags,
               default: '',
             })}

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Jobs;
+namespace Blomstra\EmailConversations\Jobs;
 
 use Flarum\Queue\AbstractJob;
 use Mailgun\Mailgun;

@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Provider;
+namespace Blomstra\EmailConversations\Provider;
 
-use Blomstra\PostByMail\NotificationMailerWithId;
+use Blomstra\EmailConversations\NotificationMailerWithId;
 use Flarum\Foundation\AbstractServiceProvider;
 use Flarum\Notification\NotificationMailer;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -25,12 +25,8 @@ class MailgunProvider extends AbstractServiceProvider
             /** @var SettingsRepositoryInterface $settings */
             $settings = resolve('flarum.settings');
 
-            return Mailgun::create($settings->get('blomstra.post-by-mail.mailgun-private-key'));
+            return Mailgun::create($settings->get('blomstra.email-conversations.mailgun-private-key'));
         });
-
-        // $this->container->bind(NotificationMailer::class, function () {
-        //     return resolve(NotificationMailerWithId::class);
-        // });
 
         $this->container->extend(NotificationMailer::class, function () {
             return resolve(NotificationMailerWithId::class);

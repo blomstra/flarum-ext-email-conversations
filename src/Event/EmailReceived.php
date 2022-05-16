@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Event;
+namespace Blomstra\EmailConversations\Event;
 
 class EmailReceived
 {

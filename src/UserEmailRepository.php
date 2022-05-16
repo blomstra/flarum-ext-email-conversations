@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail;
+namespace Blomstra\EmailConversations;
 
 use Flarum\User\EmailToken;
 use Flarum\User\User;

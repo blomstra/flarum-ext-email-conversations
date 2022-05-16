@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Listener;
+namespace Blomstra\EmailConversations\Listener;
 
-use Blomstra\PostByMail\Event\EmailReceived;
-use Blomstra\PostByMail\Jobs\Job;
-use Blomstra\PostByMail\Jobs\ProcessReceivedEmail;
+use Blomstra\EmailConversations\Event\EmailReceived;
+use Blomstra\EmailConversations\Jobs\Job;
+use Blomstra\EmailConversations\Jobs\ProcessReceivedEmail;
 use Illuminate\Contracts\Queue\Queue;
 
 class ReceivedEmailListener
