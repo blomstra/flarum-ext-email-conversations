@@ -88,9 +88,9 @@ class ProcessReceivedEmail extends EmailConversationJob
         $htmlContent = $message->getStrippedHtml();
         $this->logger->debug('HTML content: '.$htmlContent);
         $converter = new HtmlConverter([
-            'strip_tags' => true,
+            'strip_tags'    => true,
             'use_autolinks' => false,
-            'remove_nodes' => 'style script'
+            'remove_nodes'  => 'style script',
         ]);
 
         return $converter->convert($htmlContent);
