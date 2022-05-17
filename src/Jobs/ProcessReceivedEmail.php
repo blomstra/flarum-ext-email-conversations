@@ -132,21 +132,21 @@ class ProcessReceivedEmail extends EmailConversationJob
         // Subscribe the author to the discussion, if they're not already subscribed.
         $this->subscribe($author, $discussion);
 
-        // Subscribe recipients included in the 'to' and 'cc' fields of the inbound email
-        $this->logger->info(print_r($message, true));
-        $recipients = explode(',', $message->getRecipients());
-        $r = $message->getRecipients();
-        $this->logger->info("Attempting to subscribe: $r");
+        // TODO Subscribe recipients included in the 'to' and 'cc' fields of the inbound email
+        // $this->logger->info(print_r($message, true));
+        // $recipients = explode(',', $message->getRecipients());
+        // $r = $message->getRecipients();
+        // $this->logger->info("Attempting to subscribe: $r");
 
-        foreach ($recipients as $recipient) {
-            //TODO - exclude the known forum mailer email address
-            $this->logger->info("Looking for $recipient");
-            $user = $this->findUser($recipient);
+        // foreach ($recipients as $recipient) {
+        //     //TODO - exclude the known forum mailer email address
+        //     $this->logger->info("Looking for $recipient");
+        //     $user = $this->findUser($recipient);
 
-            if ($user) {
-                $this->subscribe($user, $discussion);
-            }
-        }
+        //     if ($user) {
+        //         $this->subscribe($user, $discussion);
+        //     }
+        // }
     }
 
     private function subscribe(User $user, Discussion $discussion): void
