@@ -161,6 +161,10 @@ class ProcessReceivedEmail extends EmailConversationJob
 
     private function markForApproval(Discussion $discussion): void
     {
+        if ((bool) !$this->settings->get('blomstra-email-conversations.require_approval')) {
+            return;
+        }
+        
         $discussion->is_approved = false;
         $discussion->firstPost->is_approved = false;
         $discussion->firstPost->save();

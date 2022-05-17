@@ -60,6 +60,11 @@ export default class SettingsPage extends ExtensionPage {
               type: 'bool',
               label: 'Auto subscribe to discussions when posted via email'
             })}
+            {this.buildSettingComponent({
+              setting: 'blomstra-email-conversations.require_approval',
+              type: 'bool',
+              label: 'Require approval of new discussions started via email'
+            })}
           </div>
           {this.submitButton()}
         </div>
