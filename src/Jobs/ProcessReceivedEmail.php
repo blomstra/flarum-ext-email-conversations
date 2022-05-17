@@ -17,6 +17,7 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
+use League\HTMLToMarkdown\HtmlConverter;
 use Mailgun\Model\Message\ShowResponse;
 
 class ProcessReceivedEmail extends EmailConversationJob
@@ -44,15 +45,15 @@ class ProcessReceivedEmail extends EmailConversationJob
             if ($discussion = $this->determineDiscussion($message)) {
                 //reply to existing discussion
 
-                $this->logger->info("Replying to discussion $discussion->id");
+                $this->logger->debug("Replying to discussion $discussion->id");
                 $this->replyToDiscussion($message, $user, $discussion);
             } else {
                 //start new discussion
-                $this->logger->info('Starting new discussion');
+                $this->logger->debug('Starting new discussion');
                 $this->startNewDiscussion($message, $user, $tag);
             }
         } else {
-            $this->logger->info('No user or tag found');
+            $this->logger->debug('No user or tag found');
         }
     }
 
@@ -84,10 +85,15 @@ class ProcessReceivedEmail extends EmailConversationJob
 
     private function getPostContent(ShowResponse $message): string
     {
-        //TODO HTML -> markdown conversion
-        //TODO extract other recipients from the email and add them as @mentions in the post content
+        $htmlContent = $message->getStrippedHtml();
+        $this->logger->debug('HTML content: '.$htmlContent);
+        $converter = new HtmlConverter([
+            'strip_tags' => true,
+            'use_autolinks' => false,
+            'remove_nodes' => 'style script'
+        ]);
 
-        return $message->getStrippedText();
+        return $converter->convert($htmlContent);
     }
 
     private function startNewDiscussion(ShowResponse $message, User $actor, Tag $tag): void
@@ -176,7 +182,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         $users = $post->mentionsUsers;
 
         foreach ($users as $user) {
-            $this->logger->info("Subscribing mentioned user $user->username");
+            $this->logger->debug("Subscribing mentioned user $user->username");
             $this->subscribe($user, $post->discussion);
         }
     }

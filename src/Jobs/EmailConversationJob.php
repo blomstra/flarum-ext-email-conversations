@@ -20,6 +20,6 @@ class EmailConversationJob extends ConversationJob
 
     public function __construct(protected string $messageUrl)
     {
-        parent::__construct($settings);
+        parent::__construct();
     }
 }
