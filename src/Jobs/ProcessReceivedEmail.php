@@ -17,7 +17,6 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
-use Illuminate\Support\Str;
 use Mailgun\Model\Message\ShowResponse;
 
 class ProcessReceivedEmail extends EmailConversationJob
@@ -138,7 +137,6 @@ class ProcessReceivedEmail extends EmailConversationJob
         $recipients = explode(',', $message->getRecipients());
         $r = $message->getRecipients();
         $this->logger->info("Attempting to subscribe: $r");
-
 
         foreach ($recipients as $recipient) {
             //TODO - exclude the known forum mailer email address

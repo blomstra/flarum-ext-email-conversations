@@ -14,7 +14,6 @@ namespace Blomstra\EmailConversations\Listener;
 use Blomstra\EmailConversations\Event\EmailReceived;
 use Blomstra\EmailConversations\Jobs\EmailConversationJob;
 use Blomstra\EmailConversations\Jobs\ProcessReceivedEmail;
-use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Queue\Queue;
 
 class ReceivedEmailListener
