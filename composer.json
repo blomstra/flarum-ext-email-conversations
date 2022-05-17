@@ -18,7 +18,10 @@
         "mailgun/mailgun-php": "^3.5",
         "symfony/http-client": "^6.0",
         "nyholm/psr7": "^1.5",
+        "flarum/approval": "*",
+        "flarum/mentions": "*",
         "flarum/tags": "*",
+        "flarum/subscriptions": "*",
         "blomstra/conversations": "*"
     },
     "authors": [

@@ -63,7 +63,8 @@ return [
         ->post('/confirm/additional-email/{token}', 'blomstraPostByMail.multiEmails.confirm.submit', Api\Controller\ConfirmAdditionalEmailController::class),
 
     (new Extend\Settings())
-        ->default('blomstra-email-conversations.max-additional-emails-count', 5),
+        ->default('blomstra-email-conversations.max-additional-emails-count', 5)
+        ->default('blomstra-email-conversations.auto-subscribe', false),
 
     (new Extend\Event())
         ->subscribe(AdditionalEmailEventSubscriber::class)

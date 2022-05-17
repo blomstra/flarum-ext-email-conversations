@@ -13,31 +13,33 @@ namespace Blomstra\EmailConversations\Jobs;
 
 use Blomstra\EmailConversations\UserEmail;
 use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
+use Illuminate\Support\Str;
 use Mailgun\Model\Message\ShowResponse;
 
 class ProcessReceivedEmail extends EmailConversationJob
 {
     protected string $sourceId = 'blomstra-email-conversations';
 
+    protected SettingsRepositoryInterface $settings;
+
     protected $logger;
 
     public function handle()
     {
         $this->mailgun = resolve('blomstra.mailgun');
+        $this->settings = resolve('flarum.settings');
 
         $this->logger = resolve('log');
-
-        /** @var SettingsRepositoryInterface $settings */
-        $settings = resolve('flarum.settings');
 
         /** @var ShowResponse $message */
         $message = $this->mailgun->messages()->show($this->messageUrl);
 
         $user = $this->findUser($message->getSender());
-        $tag = Tag::where('slug', $settings->get('blomstra-email-conversations.tag-slug'))->first();
+        $tag = Tag::where('slug', $this->settings->get('blomstra-email-conversations.tag-slug'))->first();
 
         if ($user && $tag) {
             if ($discussion = $this->determineDiscussion($message)) {
@@ -99,9 +101,12 @@ class ProcessReceivedEmail extends EmailConversationJob
             $message->getSender(),
             $tag
         );
-        //TODO subscribe all email recipients to the discussion
 
-        //TODO mark the new discussion as awaiting approval
+        $this->subscribeRecipientsToDiscussion($message, $discussion, $actor);
+
+        $this->markForApproval($discussion);
+
+        $this->subscribeMentionedUsers($discussion->firstPost);
     }
 
     private function replyToDiscussion(ShowResponse $message, User $actor, Discussion $discussion): void
@@ -113,5 +118,64 @@ class ProcessReceivedEmail extends EmailConversationJob
             $this->sourceId,
             $message->getSender()
         );
+
+        $this->subscribeRecipientsToDiscussion($message, $post->discussion, $actor);
+
+        $this->subscribeMentionedUsers($post);
+    }
+
+    private function subscribeRecipientsToDiscussion(ShowResponse $message, Discussion $discussion, User $author): void
+    {
+        if ((bool) !$this->settings->get('blomstra-email-conversations.auto-subscribe')) {
+            return;
+        }
+
+        // Subscribe the author to the discussion, if they're not already subscribed.
+        $this->subscribe($author, $discussion);
+
+        // Subscribe recipients included in the 'to' and 'cc' fields of the inbound email
+        $this->logger->info(print_r($message, true));
+        $recipients = explode(',', $message->getRecipients());
+        $r = $message->getRecipients();
+        $this->logger->info("Attempting to subscribe: $r");
+
+
+        foreach ($recipients as $recipient) {
+            //TODO - exclude the known forum mailer email address
+            $this->logger->info("Looking for $recipient");
+            $user = $this->findUser($recipient);
+
+            if ($user) {
+                $this->subscribe($user, $discussion);
+            }
+        }
+    }
+
+    private function subscribe(User $user, Discussion $discussion): void
+    {
+        $state = $discussion->stateFor($user);
+
+        if ($state->subscription !== 'follow') {
+            $state->subscription = 'follow';
+            $state->save();
+        }
+    }
+
+    private function markForApproval(Discussion $discussion): void
+    {
+        $discussion->is_approved = false;
+        $discussion->firstPost->is_approved = false;
+        $discussion->firstPost->save();
+        $discussion->save();
+    }
+
+    private function subscribeMentionedUsers(Post $post): void
+    {
+        $users = $post->mentionsUsers;
+
+        foreach ($users as $user) {
+            $this->logger->info("Subscribing mentioned user $user->username");
+            $this->subscribe($user, $post->discussion);
+        }
     }
 }

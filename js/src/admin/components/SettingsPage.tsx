@@ -28,6 +28,7 @@ export default class SettingsPage extends ExtensionPage {
       <div className="container">
         <div className="EmailConversationsSettingsPage">
           <div className="EmailConversations-content">
+            
             {this.buildSettingComponent({
               setting: 'blomstra-email-conversations.max-additional-emails-count',
               type: 'number',
@@ -53,6 +54,11 @@ export default class SettingsPage extends ExtensionPage {
               setting: 'blomstra-email-conversations.tag-slug',
               options: tags,
               default: '',
+            })}
+            {this.buildSettingComponent({
+              setting: 'blomstra-email-conversations.auto-subscribe',
+              type: 'bool',
+              label: 'Auto subscribe to discussions when posted via email'
             })}
           </div>
           {this.submitButton()}
