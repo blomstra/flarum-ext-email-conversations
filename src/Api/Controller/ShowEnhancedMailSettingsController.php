@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of blomstra/email-conversations.
+ *
+ * Copyright (c) 2022 Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\EmailConversations\Api\Controller;
 
 use Blomstra\EmailConversations\Api\Serializer\EnhancedMailSettingsSerializer;
@@ -25,9 +34,9 @@ class ShowEnhancedMailSettingsController extends ShowMailSettingsController
         if ($this->settings->get('mail_driver') !== 'mailgun') {
             return parent::data($request, $document);
         }
-        
+
         $errors = [];
-//dd($this->settings->get('blomstra-email-conversations.mailgun-route-id'), $this->settings->get('ianm.test'), $this->settings->get('forum_title'));
+        //dd($this->settings->get('blomstra-email-conversations.mailgun-route-id'), $this->settings->get('ianm.test'), $this->settings->get('forum_title'));
         if (empty($this->settings->get('blomstra-email-conversations.mailgun-route-id'))) {
             $errors[] = ['blomstra' => ['mailgun-route-id' => 'The mailgun route id is not set.']];
 
@@ -36,30 +45,29 @@ class ShowEnhancedMailSettingsController extends ShowMailSettingsController
 
         try {
             /** @var Route $route */
-        $response = $this->mailgun->routes()->show($this->settings->get('blomstra-email-conversations.mailgun-route-id'));
-        $route = $response->getRoute();
+            $response = $this->mailgun->routes()->show($this->settings->get('blomstra-email-conversations.mailgun-route-id'));
+            $route = $response->getRoute();
 
-        $actions = [];
+            $actions = [];
 
-        foreach ($route->getActions() as $action) {
-            $actions[] = [
-                'action' => $action->getAction(),
+            foreach ($route->getActions() as $action) {
+                $actions[] = [
+                    'action' => $action->getAction(),
+                ];
+            }
+
+            $route = [
+                'id'          => $route->getId(),
+                'actions'     => $actions,
+                'description' => $route->getDescription(),
+                'filter'      => $route->getFilter(),
+                'priority'    => $route->getPriority(),
+                'created_at'  => $route->getCreatedAt(),
             ];
-        }
 
-        $route= [
-            'id' => $route->getId(),
-            'actions' => $actions,
-            'description' => $route->getDescription(),
-            'filter' => $route->getFilter(),
-            'priority' => $route->getPriority(),
-            'created_at' => $route->getCreatedAt(),
-        ];
-
-        //dd($routes->index());
-        return array_merge(parent::data($request, $document), ['route' => $route]);
-        }
-        catch (HttpClientException $e) {
+            //dd($routes->index());
+            return array_merge(parent::data($request, $document), ['route' => $route]);
+        } catch (HttpClientException $e) {
             return parent::data($request, $document);
         }
     }

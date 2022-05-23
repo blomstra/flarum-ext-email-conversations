@@ -99,14 +99,14 @@ class ProcessReceivedEmail extends EmailConversationJob
     {
         $htmlContent = $message->getStrippedHtml();
         $attachments = $message->getAttachments();
-        
-        $this->logger->debug('HTML content: ' . $htmlContent);
-        $this->logger->debug('Attachment info:' . print_r($attachments, true));
+
+        $this->logger->debug('HTML content: '.$htmlContent);
+        $this->logger->debug('Attachment info:'.print_r($attachments, true));
 
         foreach ($attachments as $attachment) {
             $file = $this->mailgun->attachment()->show(Arr::get($attachment, 'url'));
         }
-        
+
         return $this->converter->convert($htmlContent);
     }
 
