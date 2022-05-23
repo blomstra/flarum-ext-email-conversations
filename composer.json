@@ -23,7 +23,8 @@
         "flarum/tags": "*",
         "flarum/subscriptions": "*",
         "blomstra/conversations": "@beta",
-        "league/html-to-markdown": "^5.1"
+        "league/html-to-markdown": "^5.1",
+        "fof/upload": "^1.2"
     },
     "authors": [
         {

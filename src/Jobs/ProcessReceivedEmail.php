@@ -17,6 +17,7 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
+use Illuminate\Support\Arr;
 use League\HTMLToMarkdown\HtmlConverter;
 use Mailgun\Model\Message\ShowResponse;
 
@@ -28,13 +29,24 @@ class ProcessReceivedEmail extends EmailConversationJob
 
     protected $logger;
 
+    protected HtmlConverter $converter;
+
     public function handle()
     {
         $this->mailgun = resolve('blomstra.mailgun');
         $this->settings = resolve('flarum.settings');
-
         $this->logger = resolve('log');
+        $this->converter = new HtmlConverter([
+            'strip_tags'    => true,
+            'use_autolinks' => false,
+            'remove_nodes'  => 'style script',
+        ]);
 
+        $this->process();
+    }
+
+    private function process(): void
+    {
         /** @var ShowResponse $message */
         $message = $this->mailgun->messages()->show($this->messageUrl);
 
@@ -86,14 +98,16 @@ class ProcessReceivedEmail extends EmailConversationJob
     private function getPostContent(ShowResponse $message): string
     {
         $htmlContent = $message->getStrippedHtml();
-        $this->logger->debug('HTML content: '.$htmlContent);
-        $converter = new HtmlConverter([
-            'strip_tags'    => true,
-            'use_autolinks' => false,
-            'remove_nodes'  => 'style script',
-        ]);
+        $attachments = $message->getAttachments();
+        
+        $this->logger->debug('HTML content: ' . $htmlContent);
+        $this->logger->debug('Attachment info:' . print_r($attachments, true));
 
-        return $converter->convert($htmlContent);
+        foreach ($attachments as $attachment) {
+            $file = $this->mailgun->attachment()->show(Arr::get($attachment, 'url'));
+        }
+        
+        return $this->converter->convert($htmlContent);
     }
 
     private function startNewDiscussion(ShowResponse $message, User $actor, Tag $tag): void

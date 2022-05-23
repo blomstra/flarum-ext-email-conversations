@@ -25,34 +25,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 class IncomingMailgunController implements RequestHandlerInterface
 {
     /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
-     * @var Mailgun
-     */
-    protected $mailgun;
-
-    /**
      * @param SettingsRepositoryInterface $settings
      * @param UrlGenerator                $url
      */
-    public function __construct(SettingsRepositoryInterface $settings, UrlGenerator $url, Dispatcher $events)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected UrlGenerator $url, protected Dispatcher $events, protected Mailgun $mailgun)
     {
-        $this->settings = $settings;
-        $this->url = $url;
-        $this->events = $events;
     }
 
     /**
@@ -64,8 +41,6 @@ class IncomingMailgunController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->mailgun = resolve('blomstra.mailgun');
-
         if (!$this->isValidSignature($request)) {
             return new EmptyResponse(406);
         }

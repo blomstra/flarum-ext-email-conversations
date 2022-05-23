@@ -56,7 +56,10 @@ return [
         ->post('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.create', Api\Controller\CreateUserAdditionalEmailController::class)
         ->post('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.update', Api\Controller\UpdateUserAdditionalEmailController::class)
         ->delete('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.delete', Api\Controller\DeleteUserAdditionalEmailController::class)
-        ->post('/email/receive', 'blomstraPostByMail.incoming.receive', Api\Controller\IncomingMailgunController::class),
+        ->post('/email/receive', 'blomstraPostByMail.incoming.receive', Api\Controller\IncomingMailgunController::class)
+        ->post('/mailgun/create/route', 'blomstraPostByMail.mailgun.createRoute', Api\Controller\CreateMailgunActionController::class)
+        ->remove('mailSettings.index')
+        ->get('/mail/settings', 'mailSettings.index', Api\Controller\ShowEnhancedMailSettingsController::class),
 
     (new Extend\Routes('forum'))
         ->get('/confirm/additional-email/{token}', 'blomstraPostByEmail.multiEmails.confirm', Api\Controller\ConfirmAdditionalEmailViewController::class)
@@ -65,7 +68,9 @@ return [
     (new Extend\Settings())
         ->default('blomstra-email-conversations.max-additional-emails-count', 5)
         ->default('blomstra-email-conversations.auto-subscribe', false)
-        ->default('blomstra-email-conversations.require_approval', false),
+        ->default('blomstra-email-conversations.require_approval', false)
+        ->default('blomstra-email-conversations.mailgun-route-id', '627b92f1aa1cea2370a8a742')
+        ->default('ianm.test', 'Do you see me?'), // CHANGE THIS!!!!
 
     (new Extend\Event())
         ->subscribe(AdditionalEmailEventSubscriber::class)

@@ -1,9 +1,11 @@
 import app from 'flarum/admin/app';
 import commonInit from '../common';
 import SettingsPage from './components/SettingsPage';
+import extendMailPage from './extend/extendMailPage';
 
 app.initializers.add('blomstra/email-conversations', () => {
   commonInit();
+  extendMailPage();
 
   app.extensionData
     .for('blomstra-email-conversations')

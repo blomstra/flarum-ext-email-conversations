@@ -7,6 +7,9 @@ blomstra-conversations:
 blomstra-email-conversations:
   admin:
     settings:
+      alert:
+        mail_settings: Mail settings
+        mailgun_not_configured: It looks like Mailgun is not correctly configured.
       maximum_additional_emails_per_user: Maximum number of additional emails for each user
     permissions:
       have_additional_emails: Have additional email addresses

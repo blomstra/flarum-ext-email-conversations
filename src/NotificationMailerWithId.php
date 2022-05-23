@@ -24,16 +24,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotificationMailerWithId extends NotificationMailer
 {
-    /**
-     * @var ViewFactory
-     */
-    protected $view;
-
-    public function __construct(Mailer $mailer, TranslatorInterface $translator, ViewFactory $view)
+    public function __construct(Mailer $mailer, TranslatorInterface $translator, protected ViewFactory $view)
     {
         parent::__construct($mailer, $translator);
-
-        $this->view = $view;
     }
 
     /**

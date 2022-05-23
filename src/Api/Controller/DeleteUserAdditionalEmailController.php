@@ -25,14 +25,8 @@ class DeleteUserAdditionalEmailController extends AbstractDeleteController
      */
     public $serializer = AdditionalEmailSerializer::class;
 
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    public function __construct(UserEmailRepository $repository)
+    public function __construct(protected UserEmailRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     /**

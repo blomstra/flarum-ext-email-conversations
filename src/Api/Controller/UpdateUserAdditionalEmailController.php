@@ -27,20 +27,8 @@ class UpdateUserAdditionalEmailController extends AbstractShowController
      */
     public $serializer = AdditionalEmailSerializer::class;
 
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    /**
-     * @var UserEmailValidator
-     */
-    protected $validator;
-
-    public function __construct(UserEmailRepository $repository, UserEmailValidator $validator)
+    public function __construct(protected UserEmailRepository $repository, protected UserEmailValidator $validator)
     {
-        $this->repository = $repository;
-        $this->validator = $validator;
     }
 
     /**

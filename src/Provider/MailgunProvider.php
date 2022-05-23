@@ -15,6 +15,7 @@ use Blomstra\EmailConversations\NotificationMailerWithId;
 use Flarum\Foundation\AbstractServiceProvider;
 use Flarum\Notification\NotificationMailer;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Illuminate\Support\Str;
 use Mailgun\Mailgun;
 
 class MailgunProvider extends AbstractServiceProvider
@@ -25,8 +26,12 @@ class MailgunProvider extends AbstractServiceProvider
             /** @var SettingsRepositoryInterface $settings */
             $settings = resolve('flarum.settings');
 
-            return Mailgun::create($settings->get('blomstra.email-conversations.mailgun-private-key'));
+            $regionEndpoint = Str::start($settings->get('mail_mailgun_region'), 'https://');
+
+            return Mailgun::create($settings->get('mail_mailgun_secret'), $regionEndpoint);
         });
+
+        $this->container->alias('blomstra.mailgun', Mailgun::class);
 
         $this->container->extend(NotificationMailer::class, function () {
             return resolve(NotificationMailerWithId::class);

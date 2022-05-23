@@ -32,22 +32,10 @@ class ListUserAdditionalEmailsController extends AbstractListController
     public $include = ['user'];
 
     /**
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    /**
      * @param UrlGenerator $url
      */
-    public function __construct(UrlGenerator $url, UserEmailRepository $repository)
+    public function __construct(protected UrlGenerator $url, protected UserEmailRepository $repository)
     {
-        $this->url = $url;
-        $this->repository = $repository;
     }
 
     /**
@@ -55,8 +43,6 @@ class ListUserAdditionalEmailsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // See https://docs.flarum.org/extend/api.html#api-endpoints for more information.
-
         $actor = RequestUtil::getActor($request);
 
         $filters = $this->extractFilter($request);

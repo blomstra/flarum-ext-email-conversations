@@ -32,38 +32,8 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
      */
     public $serializer = AdditionalEmailSerializer::class;
 
-    /**
-     * @var UserRepository
-     */
-    protected $users;
-
-    /**
-     * @var UserEmailValidator
-     */
-    protected $validator;
-
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    public function __construct(UserRepository $users, UserEmailValidator $validator, UserEmailRepository $repository, SettingsRepositoryInterface $settings, Dispatcher $events)
+    public function __construct(protected UserRepository $users, protected UserEmailValidator $validator, protected UserEmailRepository $repository, protected SettingsRepositoryInterface $settings, protected Dispatcher $events)
     {
-        $this->users = $users;
-        $this->validator = $validator;
-        $this->repository = $repository;
-        $this->settings = $settings;
-        $this->events = $events;
     }
 
     /**
