@@ -36,7 +36,6 @@ class ShowEnhancedMailSettingsController extends ShowMailSettingsController
         }
 
         $errors = [];
-        //dd($this->settings->get('blomstra-email-conversations.mailgun-route-id'), $this->settings->get('ianm.test'), $this->settings->get('forum_title'));
         if (empty($this->settings->get('blomstra-email-conversations.mailgun-route-id'))) {
             $errors[] = ['blomstra' => ['mailgun-route-id' => 'The mailgun route id is not set.']];
 
@@ -65,7 +64,6 @@ class ShowEnhancedMailSettingsController extends ShowMailSettingsController
                 'created_at'  => $route->getCreatedAt(),
             ];
 
-            //dd($routes->index());
             return array_merge(parent::data($request, $document), ['route' => $route]);
         } catch (HttpClientException $e) {
             return parent::data($request, $document);

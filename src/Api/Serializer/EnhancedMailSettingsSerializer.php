@@ -19,7 +19,7 @@ class EnhancedMailSettingsSerializer extends MailSettingsSerializer
     protected function getDefaultAttributes($settings)
     {
         $parentData = parent::getDefaultAttributes($settings);
-        //dd($settings);
+
         return array_merge($parentData, Arr::has($settings, 'route') ?
             [
                 'route' => $settings['route'],

@@ -69,8 +69,7 @@ return [
         ->default('blomstra-email-conversations.max-additional-emails-count', 5)
         ->default('blomstra-email-conversations.auto-subscribe', false)
         ->default('blomstra-email-conversations.require_approval', false)
-        ->default('blomstra-email-conversations.mailgun-route-id', '627b92f1aa1cea2370a8a742')
-        ->default('ianm.test', 'Do you see me?'), // CHANGE THIS!!!!
+        ->default('blomstra-email-conversations.mailgun-route-id', null),
 
     (new Extend\Event())
         ->subscribe(AdditionalEmailEventSubscriber::class)
