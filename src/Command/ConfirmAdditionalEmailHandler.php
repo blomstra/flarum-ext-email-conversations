@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Command;
+namespace Blomstra\EmailConversations\Command;
 
-use Blomstra\PostByMail\UserEmailRepository;
+use Blomstra\EmailConversations\UserEmailRepository;
 use Flarum\User\EmailToken;
 
 class ConfirmAdditionalEmailHandler

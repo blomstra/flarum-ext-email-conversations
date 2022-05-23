@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Controller;
+namespace Blomstra\EmailConversations\Api\Controller;
 
-use Blomstra\PostByMail\Command\ConfirmAdditionalEmail;
+use Blomstra\EmailConversations\Command\ConfirmAdditionalEmail;
 use Flarum\Http\UrlGenerator;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;

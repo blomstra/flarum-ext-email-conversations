@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail;
+namespace Blomstra\EmailConversations;
 
-use Blomstra\PostByMail\Event\AdditionalEmailCreated;
+use Blomstra\EmailConversations\Event\AdditionalEmailCreated;
 use Flarum\Http\UrlGenerator;
 use Flarum\Locale\Translator;
 use Flarum\Mail\Job\SendRawEmailJob;
@@ -75,8 +75,8 @@ class AdditionalEmailEventSubscriber
      */
     protected function sendConfirmationEmail(string $email, $data)
     {
-        $body = $this->translator->trans('blomstra-post-by-mail.email.multi-emails.body', $data);
-        $subject = $this->translator->trans('blomstra-post-by-mail.email.multi-emails.subject');
+        $body = $this->translator->trans('blomstra-email-conversations.email.multi-emails.body', $data);
+        $subject = $this->translator->trans('blomstra-email-conversations.email.multi-emails.subject');
 
         $this->queue->push(new SendRawEmailJob($email, $subject, $body));
     }

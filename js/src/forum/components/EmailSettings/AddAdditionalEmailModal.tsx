@@ -63,6 +63,6 @@ export default class AddAdditionalEmailModal extends Modal<IAttrs> {
   }
 
   trans(key: string, vals?: Record<string, unknown>) {
-    return app.translator.trans(`blomstra-post-by-mail.forum.profile.settings.multi-email.add-additional-email-modal.${key}`, vals);
+    return app.translator.trans(`blomstra-email-conversations.forum.profile.settings.multi-email.add-additional-email-modal.${key}`, vals);
   }
 }

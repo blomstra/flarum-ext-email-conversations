@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail;
+namespace Blomstra\EmailConversations;
 
-use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\EmailConversations\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\EmailConversations\Event\EmailReceived;
+use Blomstra\EmailConversations\Provider\MailgunProvider;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\UserSerializer;
@@ -53,18 +55,33 @@ return [
         ->get('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.list', Api\Controller\ListUserAdditionalEmailsController::class)
         ->post('/blomstra-additional-email', 'blomstraPostByEmail.multiEmails.create', Api\Controller\CreateUserAdditionalEmailController::class)
         ->post('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.update', Api\Controller\UpdateUserAdditionalEmailController::class)
-        ->delete('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.delete', Api\Controller\DeleteUserAdditionalEmailController::class),
+        ->delete('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.delete', Api\Controller\DeleteUserAdditionalEmailController::class)
+        ->post('/email/receive', 'blomstraPostByMail.incoming.receive', Api\Controller\IncomingMailgunController::class)
+        ->post('/mailgun/create/route', 'blomstraPostByMail.mailgun.createRoute', Api\Controller\CreateMailgunActionController::class)
+        ->remove('mailSettings.index')
+        ->get('/mail/settings', 'mailSettings.index', Api\Controller\ShowEnhancedMailSettingsController::class),
 
     (new Extend\Routes('forum'))
         ->get('/confirm/additional-email/{token}', 'blomstraPostByEmail.multiEmails.confirm', Api\Controller\ConfirmAdditionalEmailViewController::class)
         ->post('/confirm/additional-email/{token}', 'blomstraPostByMail.multiEmails.confirm.submit', Api\Controller\ConfirmAdditionalEmailController::class),
 
     (new Extend\Settings())
-        ->default('blomstra-post-by-mail.max-additional-emails-count', 5),
+        ->default('blomstra-email-conversations.max-additional-emails-count', 5)
+        ->default('blomstra-email-conversations.auto-subscribe', false)
+        ->default('blomstra-email-conversations.require_approval', false)
+        ->default('blomstra-email-conversations.mailgun-route-id', null),
 
     (new Extend\Event())
-        ->subscribe(AdditionalEmailEventSubscriber::class),
+        ->subscribe(AdditionalEmailEventSubscriber::class)
+        ->listen(EmailReceived::class, Listener\ReceivedEmailListener::class),
 
     (new Extend\View())
-        ->namespace('blomstra-post-by-mail', __DIR__.'/views'),
+        ->namespace('blomstra-email-conversations', __DIR__.'/views'),
+
+    (new Extend\Csrf())
+        ->exemptRoute('blomstraPostByMail.incoming.receive'),
+
+    (new Extend\ServiceProvider())
+        ->register(MailgunProvider::class),
+
 ];

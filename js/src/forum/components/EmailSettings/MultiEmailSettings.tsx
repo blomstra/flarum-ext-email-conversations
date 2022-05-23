@@ -101,6 +101,6 @@ export default class MultiEmailSettings extends Component<IAttrs, IState> {
   }
 
   trans(key: string, vals?: Record<string, unknown>) {
-    return app.translator.trans(`blomstra-post-by-mail.forum.profile.settings.multi-email.${key}`, vals);
+    return app.translator.trans(`blomstra-email-conversations.forum.profile.settings.multi-email.${key}`, vals);
   }
 }

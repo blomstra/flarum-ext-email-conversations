@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Controller;
+namespace Blomstra\EmailConversations\Api\Controller;
 
-use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
-use Blomstra\PostByMail\UserEmailRepository;
+use Blomstra\EmailConversations\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\EmailConversations\UserEmailRepository;
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\Http\RequestUtil;
 use Flarum\Http\UrlGenerator;
@@ -32,22 +32,10 @@ class ListUserAdditionalEmailsController extends AbstractListController
     public $include = ['user'];
 
     /**
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    /**
      * @param UrlGenerator $url
      */
-    public function __construct(UrlGenerator $url, UserEmailRepository $repository)
+    public function __construct(protected UrlGenerator $url, protected UserEmailRepository $repository)
     {
-        $this->url = $url;
-        $this->repository = $repository;
     }
 
     /**
@@ -55,8 +43,6 @@ class ListUserAdditionalEmailsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // See https://docs.flarum.org/extend/api.html#api-endpoints for more information.
-
         $actor = RequestUtil::getActor($request);
 
         $filters = $this->extractFilter($request);

@@ -9,8 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\EmailConversations\Event;
+use Flarum\Database\Migration;
 
-class AdditionalEmailEdited extends AbstractAdditionalEmail
-{
-}
+return Migration::addColumns(
+    'discussions',
+    [
+        'notification_id' => ['text', 'nullable' => true],
+    ]
+);

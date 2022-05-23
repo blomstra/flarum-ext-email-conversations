@@ -9,16 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\EmailConversations\Command;
+namespace Blomstra\EmailConversations\Event;
 
-class ConfirmAdditionalEmail
+class EmailReceived
 {
-    /**
-     * The additional email confirmation token.
-     *
-     * @param string $token
-     */
-    public function __construct(public string $token)
+    public function __construct(public ?string $messageUrl)
     {
     }
 }

@@ -1,20 +1,30 @@
 {
-    "name": "blomstra/post-by-mail",
+    "name": "blomstra/email-conversations",
     "description": "Start discussions and reply to discussions via email ",
     "keywords": [
         "flarum"
     ],
     "homepage": "https://blomstra.net",
     "support": {
-        "source": "https://github.com/blomstra/flarum-ext-post-by-mail",
-        "issues": "https://github.com/blomstra/flarum-ext-post-by-mail/issues",
+        "source": "https://github.com/blomstra/flarum-ext-email-conversations",
+        "issues": "https://github.com/blomstra/flarum-ext-email-conversations/issues",
         "email": "helpdesk@blomstra.net"
     },
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "flarum/core": "^1.2.0"
+        "flarum/core": "^1.3.0",
+        "mailgun/mailgun-php": "^3.5",
+        "symfony/http-client": "^6.0",
+        "nyholm/psr7": "^1.5",
+        "flarum/approval": "*",
+        "flarum/mentions": "*",
+        "flarum/tags": "*",
+        "flarum/subscriptions": "*",
+        "blomstra/conversations": "@beta",
+        "league/html-to-markdown": "^5.1",
+        "fof/upload": "^1.2"
     },
     "authors": [
         {
@@ -25,12 +35,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Blomstra\\PostByMail\\": "src/"
+            "Blomstra\\EmailConversations\\": "src/"
         }
     },
     "extra": {
         "flarum-extension": {
-            "title": "Post By Mail",
+            "title": "Conversations by Email",
             "category": "feature",
             "icon": {
                 "name": "fas fa-mail-bulk",

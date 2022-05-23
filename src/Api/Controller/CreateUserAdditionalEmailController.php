@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Controller;
+namespace Blomstra\EmailConversations\Api\Controller;
 
-use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
-use Blomstra\PostByMail\Event\AdditionalEmailCreated;
-use Blomstra\PostByMail\UserEmail;
-use Blomstra\PostByMail\UserEmailRepository;
-use Blomstra\PostByMail\UserEmailValidator;
+use Blomstra\EmailConversations\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\EmailConversations\Event\AdditionalEmailCreated;
+use Blomstra\EmailConversations\UserEmail;
+use Blomstra\EmailConversations\UserEmailRepository;
+use Blomstra\EmailConversations\UserEmailValidator;
 use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -32,38 +32,8 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
      */
     public $serializer = AdditionalEmailSerializer::class;
 
-    /**
-     * @var UserRepository
-     */
-    protected $users;
-
-    /**
-     * @var UserEmailValidator
-     */
-    protected $validator;
-
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    public function __construct(UserRepository $users, UserEmailValidator $validator, UserEmailRepository $repository, SettingsRepositoryInterface $settings, Dispatcher $events)
+    public function __construct(protected UserRepository $users, protected UserEmailValidator $validator, protected UserEmailRepository $repository, protected SettingsRepositoryInterface $settings, protected Dispatcher $events)
     {
-        $this->users = $users;
-        $this->validator = $validator;
-        $this->repository = $repository;
-        $this->settings = $settings;
-        $this->events = $events;
     }
 
     /**
@@ -88,7 +58,7 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
         $this->validator->assertValid($model->getAttributes());
 
         $existingCount = $this->repository->getCountForUser($user, $actor);
-        $maxCount = $this->settings->get('blomstra-post-by-mail.max-additional-emails-count', 5);
+        $maxCount = $this->settings->get('blomstra-email-conversations.max-additional-emails-count', 5);
 
         if ($existingCount >= $maxCount) {
             throw new \Flarum\Foundation\ValidationException(['You may only have a maximum of '.$maxCount.' additional email addresses.']);

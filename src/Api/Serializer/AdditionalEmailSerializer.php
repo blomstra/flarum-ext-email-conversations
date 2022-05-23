@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Serializer;
+namespace Blomstra\EmailConversations\Api\Serializer;
 
-use Blomstra\PostByMail\UserEmail;
+use Blomstra\EmailConversations\UserEmail;
 use Flarum\Api\Serializer\AbstractSerializer;
 use Flarum\Api\Serializer\BasicUserSerializer;
 

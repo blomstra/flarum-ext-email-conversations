@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Controller;
+namespace Blomstra\EmailConversations\Api\Controller;
 
-use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
-use Blomstra\PostByMail\UserEmailRepository;
+use Blomstra\EmailConversations\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\EmailConversations\UserEmailRepository;
 use Flarum\Api\Controller\AbstractDeleteController;
 use Flarum\Http\RequestUtil;
 use Illuminate\Support\Arr;
@@ -25,14 +25,8 @@ class DeleteUserAdditionalEmailController extends AbstractDeleteController
      */
     public $serializer = AdditionalEmailSerializer::class;
 
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    public function __construct(UserEmailRepository $repository)
+    public function __construct(protected UserEmailRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     /**

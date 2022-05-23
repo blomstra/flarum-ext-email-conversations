@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Event;
+namespace Blomstra\EmailConversations\Event;
 
 class AdditionalEmailDeleted extends AbstractAdditionalEmail
 {

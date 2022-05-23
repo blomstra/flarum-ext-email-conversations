@@ -1,12 +1,31 @@
-blomstra-post-by-mail:
+blomstra-conversations:
+  forum:
+    post:
+      source:
+        blomstra-email-conversations: via email
+
+blomstra-email-conversations:
   admin:
+    email-page:
+      mailgun:
+        create-route: Create Mailgun incoming route
+        heading: Incoming Mailgun route
     settings:
+      alert:
+        mail_settings: Mail settings
+        mailgun_not_configured: It looks like Mailgun is not correctly configured.
+      email_post_tag: Incoming email new discussion tag
+      email_post_tag_help: When a new discussion is started, discussions will be started in the selected tag. 
+      email_post_tag_none: "--select--"
       maximum_additional_emails_per_user: Maximum number of additional emails for each user
+      maximum_additional_emails_per_user_help: "Specify the maximum number of additional email addresses a user may associate with their forum profile."
     permissions:
       have_additional_emails: Have additional email addresses
       manage_additional_emails_of_others: Manager other users' additional email addresses
 
   forum:
+    post:
+      source: via email
     profile:
       settings:
         multi-email:

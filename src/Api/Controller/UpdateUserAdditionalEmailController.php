@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of blomstra/post-by-mail.
+ * This file is part of blomstra/email-conversations.
  *
  * Copyright (c) 2022 Blomstra Ltd.
  *
@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Blomstra\PostByMail\Api\Controller;
+namespace Blomstra\EmailConversations\Api\Controller;
 
-use Blomstra\PostByMail\Api\Serializer\AdditionalEmailSerializer;
-use Blomstra\PostByMail\UserEmailRepository;
-use Blomstra\PostByMail\UserEmailValidator;
+use Blomstra\EmailConversations\Api\Serializer\AdditionalEmailSerializer;
+use Blomstra\EmailConversations\UserEmailRepository;
+use Blomstra\EmailConversations\UserEmailValidator;
 use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Http\RequestUtil;
 use Illuminate\Support\Arr;
@@ -27,20 +27,8 @@ class UpdateUserAdditionalEmailController extends AbstractShowController
      */
     public $serializer = AdditionalEmailSerializer::class;
 
-    /**
-     * @var UserEmailRepository
-     */
-    protected $repository;
-
-    /**
-     * @var UserEmailValidator
-     */
-    protected $validator;
-
-    public function __construct(UserEmailRepository $repository, UserEmailValidator $validator)
+    public function __construct(protected UserEmailRepository $repository, protected UserEmailValidator $validator)
     {
-        $this->repository = $repository;
-        $this->validator = $validator;
     }
 
     /**
