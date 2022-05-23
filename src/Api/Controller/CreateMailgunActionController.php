@@ -43,7 +43,7 @@ class CreateMailgunActionController extends AbstractCreateController
         $createResponse = $this->mailgun->routes()->create($expression, $actions, $description);
 
         //TODO check if route was created successfully!
-        
+
         $this->settings->set('blomstra-email-conversations.mailgun-route-id', $createResponse->getRoute()->getId());
 
         return $createResponse->getRoute();
