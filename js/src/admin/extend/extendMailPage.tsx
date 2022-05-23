@@ -107,17 +107,18 @@ export default function extendMailPage() {
       items.add(
         'create-route',
         <Button className="Button" onclick={() => this.configMailgunRoute()} loading={this.configuringRoute}>
-          Create Mailgun incoming route
+          {app.translator.trans('blomstra-email-conversations.admin.email-page.mailgun.create-route')}
         </Button>,
         5
       );
     } else {
       items.add(
         'route-info',
-        <FieldSet label="Incoming Mailgun route ID">
+        <FieldSet label={app.translator.trans('blomstra-email-conversations.admin.email-page.mailgun.heading')}>
           <div>
-            <p>{this.route['description']}</p>
-            <code>{this.route['id']}</code>
+            <p>
+              <code>{this.route['id']}</code> - {this.route['description']}
+            </p>
           </div>
         </FieldSet>,
         5
