@@ -47,6 +47,9 @@
                 "backgroundColor": "#EBF1FD",
                 "color": "#3a98d0"
             }
-        }
+        },
+        "optional-dependencies": [
+            "fof/pretty-mail"
+        ]
     }
 }
