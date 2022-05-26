@@ -20,6 +20,10 @@ php flarum migrate
 php flarum cache:clear
 ```
 
+## Integration with `fof/pretty-mail`
+
+If you are using `fof/pretty-mail`, it is required that you update your templates to include `$notificationId`, somewhere within the visible portion of the mail.
+
 ## Links
 
 - [Packagist](https://packagist.org/packages/blomstra/email-conversations)
