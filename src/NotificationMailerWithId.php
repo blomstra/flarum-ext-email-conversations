@@ -19,12 +19,11 @@ use Flarum\User\User;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Mail\Message;
-use Illuminate\Support\Str;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotificationMailerWithId extends NotificationMailer
 {
-    public function __construct(Mailer $mailer, TranslatorInterface $translator, protected ViewFactory $view)
+    public function __construct(Mailer $mailer, TranslatorInterface $translator, protected ViewFactory $view, protected NotificationIdRepository $notificationIds)
     {
         parent::__construct($mailer, $translator);
     }
@@ -59,7 +58,7 @@ class NotificationMailerWithId extends NotificationMailer
             $data = [
                 'user'           => $user,
                 'blueprint'      => $blueprint,
-                'notificationId' => '#'.$this->getNotificationIdForDiscussion($discussion).'#',
+                'notificationId' => $this->notificationIds->getNotificationIdForDiscussion($discussion),
             ];
 
             return BladeCompiler::render('{!! $body !!}'."\n\n".'Notification ID: {!! $notificationId !!}'."\n", array_merge($data, [
@@ -68,24 +67,5 @@ class NotificationMailerWithId extends NotificationMailer
         }
 
         return $body;
-    }
-
-    /**
-     * To prevent cross-posting by manipulating the Notification ID, we generate a 40 character string and
-     * store in on the discussion table. This is used by the email processor to identify the discussion, rather
-     * than using the discussion ID.
-     *
-     * @param Discussion $discussion
-     *
-     * @return string
-     */
-    private function getNotificationIdForDiscussion(Discussion $discussion): string
-    {
-        if (!$discussion->notification_id) {
-            $discussion->notification_id = Str::random(40);
-            $discussion->save();
-        }
-
-        return $discussion->notification_id;
     }
 }

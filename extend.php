@@ -18,7 +18,9 @@ use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
+use Flarum\Extension\ExtensionManager;
 use Flarum\User\User;
+use FoF\PrettyMail\Extend\PrettyMail as PrettyMailExtend;
 
 return [
     (new Extend\Frontend('forum'))
@@ -84,4 +86,7 @@ return [
     (new Extend\ServiceProvider())
         ->register(MailgunProvider::class),
 
+    // We only want to call this extender if fof/pretty-mail is enabled, and the class exists...
+    class_exists(PrettyMailExtend::class) && (resolve(ExtensionManager::class))->isEnabled('fof-pretty-mail') ? (new PrettyMailExtend())
+        ->addTemplateData('notificationId', Callback\NotificationId::class) : [],
 ];
