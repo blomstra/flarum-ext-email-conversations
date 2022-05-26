@@ -50,13 +50,13 @@ class ProcessReceivedEmail extends EmailConversationJob
     {
         /** @var ShowResponse $message */
         $message = $this->mailgun->messages()->show($this->messageUrl);
-        $this->logger->debug("------------------------------------------------------------------------");
-        $this->logger->debug("Received email from " . $message->getSender());
+        $this->logger->debug('------------------------------------------------------------------------');
+        $this->logger->debug('Received email from '.$message->getSender());
         $user = $this->findUser($message->getSender());
         $this->logger->debug("Matched to user $user->id $user->username");
 
-        $this->logger->debug("Message headers:", $message->getMessageHeaders());
-        
+        $this->logger->debug('Message headers:', $message->getMessageHeaders());
+
         $tag = Tag::where('slug', $this->settings->get('blomstra-email-conversations.tag-slug'))->first();
 
         if ($user && $tag) {
@@ -97,10 +97,11 @@ class ProcessReceivedEmail extends EmailConversationJob
 
         if ($matches[1] === null) {
             $this->logger->debug("Determine discussion - no notification id found\n\n --");
+
             return null;
         }
 
-        $this->logger->debug("Determine discussion - match", $matches);
+        $this->logger->debug('Determine discussion - match', $matches);
 
         $discussion = Discussion::where('notification_id', $matches[1])->first();
 

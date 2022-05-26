@@ -24,14 +24,14 @@ use FoF\PrettyMail\Extend\PrettyMail as PrettyMailExtend;
 
 return [
     (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js')
-        ->css(__DIR__ . '/less/forum.less'),
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->css(__DIR__.'/less/forum.less'),
 
     (new Extend\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js')
-        ->css(__DIR__ . '/less/admin.less'),
+        ->js(__DIR__.'/js/dist/admin.js')
+        ->css(__DIR__.'/less/admin.less'),
 
-    new Extend\Locales(__DIR__ . '/locale'),
+    new Extend\Locales(__DIR__.'/locale'),
 
     (new Extend\Model(User::class))
         ->hasMany('additional_emails', UserEmail::class, 'user_id'),
@@ -78,7 +78,7 @@ return [
         ->listen(EmailReceived::class, Listener\ReceivedEmailListener::class),
 
     (new Extend\View())
-        ->namespace('blomstra-email-conversations', __DIR__ . '/views'),
+        ->namespace('blomstra-email-conversations', __DIR__.'/views'),
 
     (new Extend\Csrf())
         ->exemptRoute('blomstraPostByMail.incoming.receive'),
