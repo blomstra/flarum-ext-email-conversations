@@ -20,6 +20,7 @@ use Flarum\User\User;
 use Illuminate\Support\Arr;
 use League\HTMLToMarkdown\HtmlConverter;
 use Mailgun\Model\Message\ShowResponse;
+use Psr\Log\LoggerInterface;
 
 class ProcessReceivedEmail extends EmailConversationJob
 {
@@ -27,7 +28,7 @@ class ProcessReceivedEmail extends EmailConversationJob
 
     protected SettingsRepositoryInterface $settings;
 
-    protected $logger;
+    protected LoggerInterface $logger;
 
     protected HtmlConverter $converter;
 
@@ -49,8 +50,13 @@ class ProcessReceivedEmail extends EmailConversationJob
     {
         /** @var ShowResponse $message */
         $message = $this->mailgun->messages()->show($this->messageUrl);
-
+        $this->logger->debug("------------------------------------------------------------------------");
+        $this->logger->debug("Received email from " . $message->getSender());
         $user = $this->findUser($message->getSender());
+        $this->logger->debug("Matched to user $user->id $user->username");
+
+        $this->logger->debug("Message headers:", $message->getMessageHeaders());
+        
         $tag = Tag::where('slug', $this->settings->get('blomstra-email-conversations.tag-slug'))->first();
 
         if ($user && $tag) {
@@ -84,15 +90,27 @@ class ProcessReceivedEmail extends EmailConversationJob
     private function determineDiscussion(ShowResponse $message): ?Discussion
     {
         $content = $message->getBodyPlain();
+        $this->logger->debug("Determine discussion - content \n\n$content\n\n --");
         $matches = null;
 
         preg_match('/#(\w{40})#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
 
         if ($matches[1] === null) {
+            $this->logger->debug("Determine discussion - no notification id found\n\n --");
             return null;
         }
 
-        return Discussion::where('notification_id', $matches[1])->first();
+        $this->logger->debug("Determine discussion - match", $matches);
+
+        $discussion = Discussion::where('notification_id', $matches[1])->first();
+
+        if ($discussion) {
+            $this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
+        } else {
+            $this->logger->debug("Detected discussion but couldn't find it\n\n --");
+        }
+
+        return $discussion;
     }
 
     private function getPostContent(ShowResponse $message): string
@@ -100,8 +118,8 @@ class ProcessReceivedEmail extends EmailConversationJob
         $htmlContent = $message->getStrippedHtml();
         $attachments = $message->getAttachments();
 
-        $this->logger->debug('HTML content: '.$htmlContent);
-        $this->logger->debug('Attachment info:'.print_r($attachments, true));
+        //$this->logger->debug('HTML content: '.$htmlContent);
+        //$this->logger->debug('Attachment info:'.print_r($attachments, true));
 
         foreach ($attachments as $attachment) {
             $file = $this->mailgun->attachment()->show(Arr::get($attachment, 'url'));

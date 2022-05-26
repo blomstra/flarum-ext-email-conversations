@@ -18,18 +18,20 @@ use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
+use Flarum\Extension\ExtensionManager;
 use Flarum\User\User;
+use FoF\PrettyMail\Extend\PrettyMail as PrettyMailExtend;
 
 return [
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/less/forum.less'),
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/less/forum.less'),
 
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js')
-        ->css(__DIR__.'/less/admin.less'),
+        ->js(__DIR__ . '/js/dist/admin.js')
+        ->css(__DIR__ . '/less/admin.less'),
 
-    new Extend\Locales(__DIR__.'/locale'),
+    new Extend\Locales(__DIR__ . '/locale'),
 
     (new Extend\Model(User::class))
         ->hasMany('additional_emails', UserEmail::class, 'user_id'),
@@ -76,7 +78,7 @@ return [
         ->listen(EmailReceived::class, Listener\ReceivedEmailListener::class),
 
     (new Extend\View())
-        ->namespace('blomstra-email-conversations', __DIR__.'/views'),
+        ->namespace('blomstra-email-conversations', __DIR__ . '/views'),
 
     (new Extend\Csrf())
         ->exemptRoute('blomstraPostByMail.incoming.receive'),
@@ -84,4 +86,7 @@ return [
     (new Extend\ServiceProvider())
         ->register(MailgunProvider::class),
 
+    // We only want to call this extender if fof/pretty-mail is enabled, and the class exists...
+    class_exists(PrettyMailExtend::class) && (resolve(ExtensionManager::class))->isEnabled('fof-pretty-mail') ? (new PrettyMailExtend())
+        ->addTemplateData('notificationId', Callback\NotificationId::class) : [],
 ];
