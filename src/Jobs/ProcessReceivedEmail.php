@@ -52,7 +52,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         /** @var ShowResponse $message */
         $message = $this->mailgun->messages()->show($this->messageUrl);
         $this->logger->debug('------------------------------------------------------------------------');
-        $this->logger->debug('Received email from ' . $message->getSender());
+        $this->logger->debug('Received email from '.$message->getSender());
         $user = $this->findUser($message->getSender());
         $this->logger->debug("Matched to user $user->id $user->username");
 
@@ -103,12 +103,12 @@ class ProcessReceivedEmail extends EmailConversationJob
 
             if ($this->settings->get('blomstra-email-conversations.match_subject')) {
                 //attempt to match based on subject title and source.
-                $this->logger->debug("Looking for matching discussion title: " . $message->getSubject());
+                $this->logger->debug('Looking for matching discussion title: '.$message->getSubject());
 
                 $title = trim(Str::replace(['RE:', 're:', 'Re:'], '', $message->getSubject()));
 
                 $discussion = Discussion::query()
-                    ->where('discussions.title', 'like', '%' . $title)
+                    ->where('discussions.title', 'like', '%'.$title)
                     ->whereIn('discussions.id', function ($query) {
                         $query->select('discussion_id')
                             ->from('posts')
@@ -128,7 +128,7 @@ class ProcessReceivedEmail extends EmailConversationJob
             if ($matches[1]) {
                 $this->logger->debug("Detected discussion but couldn't find it\n\n --");
             } else {
-                $this->logger->debug("Tried to match based on title: " . $title . ", but found nothing");
+                $this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
             }
         }
 
