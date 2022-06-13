@@ -17,14 +17,20 @@ blomstra-email-conversations:
         create-route: Create Mailgun incoming route
         heading: Incoming Mailgun route
     settings:
+      auto_subscribe: Auto subscribe
+      auto_subscribe_help: Auto subscribe to discussions when posted via email.
       alert:
         mail_settings: Mail settings
         mailgun_not_configured: It looks like Mailgun is not correctly configured.
       email_post_tag: Incoming email new discussion tag
       email_post_tag_help: When a new discussion is started, discussions will be started in the selected tag. 
       email_post_tag_none: "--select--"
+      match_subject: Attempt to match the email subject to discussion title
+      match_subject_help: When enabled, we'll try to find a matching discussion title from the email subject.
       maximum_additional_emails_per_user: Maximum number of additional emails for each user
       maximum_additional_emails_per_user_help: "Specify the maximum number of additional email addresses a user may associate with their forum profile."
+      require_approval: Require approval
+      require_approval_help: For new discussions started via email, mark these discussions as awaiting moderator approval, so they can be re-tagged, etc.
     permissions:
       have_additional_emails: Have additional email addresses
       manage_additional_emails_of_others: Manager other users' additional email addresses

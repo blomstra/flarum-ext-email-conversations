@@ -71,6 +71,7 @@ return [
         ->default('blomstra-email-conversations.max-additional-emails-count', 5)
         ->default('blomstra-email-conversations.auto-subscribe', false)
         ->default('blomstra-email-conversations.require_approval', false)
+        ->default('blomstra-email-conversations.match_subject', true)
         ->default('blomstra-email-conversations.mailgun-route-id', null),
 
     (new Extend\Event())

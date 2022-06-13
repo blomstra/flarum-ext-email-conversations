@@ -18,6 +18,7 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use League\HTMLToMarkdown\HtmlConverter;
 use Mailgun\Model\Message\ShowResponse;
 use Psr\Log\LoggerInterface;
@@ -95,20 +96,40 @@ class ProcessReceivedEmail extends EmailConversationJob
 
         preg_match('/#(\w{40})#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
 
+        $discussion = null;
+
         if ($matches[1] === null) {
             $this->logger->debug("Determine discussion - no notification id found\n\n --");
 
-            return null;
+            if ($this->settings->get('blomstra-email-conversations.match_subject')) {
+                //attempt to match based on subject title and source.
+                $this->logger->debug('Looking for matching discussion title: '.$message->getSubject());
+
+                $title = trim(Str::replace(['RE:', 're:', 'Re:'], '', $message->getSubject()));
+
+                $discussion = Discussion::query()
+                    ->where('discussions.title', 'like', '%'.$title)
+                    ->whereIn('discussions.id', function ($query) {
+                        $query->select('discussion_id')
+                            ->from('posts')
+                            ->where('source', $this->sourceId);
+                    })
+                    ->first();
+            }
+        } else {
+            $this->logger->debug('Determine discussion - match', $matches);
+
+            $discussion = Discussion::where('notification_id', $matches[1])->first();
         }
-
-        $this->logger->debug('Determine discussion - match', $matches);
-
-        $discussion = Discussion::where('notification_id', $matches[1])->first();
 
         if ($discussion) {
             $this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
         } else {
-            $this->logger->debug("Detected discussion but couldn't find it\n\n --");
+            if ($matches[1]) {
+                $this->logger->debug("Detected discussion but couldn't find it\n\n --");
+            } else {
+                $this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
+            }
         }
 
         return $discussion;

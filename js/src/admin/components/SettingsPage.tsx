@@ -84,14 +84,20 @@ export default class SettingsPage extends ExtensionPage {
             {this.buildSettingComponent({
               setting: 'blomstra-email-conversations.auto-subscribe',
               type: 'bool',
-              label: 'Auto subscribe to discussions when posted via email',
-              help: 'Auto subscribe to discussions when posted via email',
+              label: app.translator.trans('blomstra-email-conversations.admin.settings.auto_subscribe'),
+              help: app.translator.trans('blomstra-email-conversations.admin.settings.auto_subscribe_help'),
             })}
             {this.buildSettingComponent({
               setting: 'blomstra-email-conversations.require_approval',
               type: 'bool',
-              label: 'Require approval of new discussions started via email',
-              help: 'Require approval of new discussions started via email',
+              label: app.translator.trans('blomstra-email-conversations.admin.settings.require_approval'),
+              help: app.translator.trans('blomstra-email-conversations.admin.settings.require_approval_help'),
+            })}
+            {this.buildSettingComponent({
+              setting: 'blomstra-email-conversations.match_subject',
+              label: app.translator.trans('blomstra-email-conversations.admin.settings.match_subject'),
+              help: app.translator.trans('blomstra-email-conversations.admin.settings.match_subject_help'),
+              type: 'boolean',
             })}
           </div>
           {this.submitButton()}
