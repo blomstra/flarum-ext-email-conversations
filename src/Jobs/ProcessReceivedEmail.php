@@ -187,7 +187,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         //$this->logger->debug('Content ID map:'.print_r($contentIdMap, true));
 
         foreach ($attachments as $attachment) {
-            $this->logger->debug("Attachment info:", $attachment);
+            $this->logger->debug('Attachment info:', $attachment);
 
             $file = $this->mailgun->attachment()->show(Arr::get($attachment, 'url'));
 
@@ -197,11 +197,11 @@ class ProcessReceivedEmail extends EmailConversationJob
             $body = $file->getBody()->getContents();
             //$this->logger->debug("Got attachment body: ".$body);
 
-            $this->logger->debug("Attachment: ". print_r($file, true));
+            $this->logger->debug('Attachment: '.print_r($file, true));
         }
 
         foreach ($contentIdMap as $content) {
-            $this->logger->debug("Content:", $content);
+            $this->logger->debug('Content:', $content);
         }
 
         $markdownContent = $this->converter->convert($htmlContent);
