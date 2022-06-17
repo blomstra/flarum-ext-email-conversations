@@ -85,12 +85,12 @@ class ProcessReceivedEmail extends EmailConversationJob
     {
         /** @var ShowResponse $message */
         $message = $this->mailgun->messages()->show($this->messageUrl);
-        $this->logger->debug('------------------------------------------------------------------------');
-        $this->logger->debug('Received email from '.$message->getSender());
+        //$this->logger->debug('------------------------------------------------------------------------');
+        //$this->logger->debug('Received email from '.$message->getSender());
         $user = $this->findUser($message->getSender());
-        $this->logger->debug("Matched to user $user->id $user->username");
+        //$this->logger->debug("Matched to user $user->id $user->username");
 
-        $this->logger->debug('Message headers:', $message->getMessageHeaders());
+        //$this->logger->debug('Message headers:', $message->getMessageHeaders());
 
         $tag = Tag::where('slug', $this->settings->get('blomstra-email-conversations.tag-slug'))->first();
 
@@ -98,15 +98,15 @@ class ProcessReceivedEmail extends EmailConversationJob
             if ($discussion = $this->determineDiscussion($message)) {
                 //reply to existing discussion
 
-                $this->logger->debug("Replying to discussion $discussion->id");
+                //$this->logger->debug("Replying to discussion $discussion->id");
                 $this->replyToDiscussion($message, $user, $discussion);
             } else {
                 //start new discussion
-                $this->logger->debug('Starting new discussion');
+                //$this->logger->debug('Starting new discussion');
                 $this->startNewDiscussion($message, $user, $tag);
             }
         } else {
-            $this->logger->debug('No user or tag found');
+            //$this->logger->debug('No user or tag found');
         }
     }
 
@@ -133,11 +133,11 @@ class ProcessReceivedEmail extends EmailConversationJob
         $discussion = null;
 
         if ($matches[1] === null) {
-            $this->logger->debug("Determine discussion - no notification id found\n\n --");
+            //$this->logger->debug("Determine discussion - no notification id found\n\n --");
 
             if ($this->settings->get('blomstra-email-conversations.match_subject')) {
                 //attempt to match based on subject title and source.
-                $this->logger->debug('Looking for matching discussion title: '.$message->getSubject());
+                //$this->logger->debug('Looking for matching discussion title: '.$message->getSubject());
 
                 $title = $this->trimTitle($message->getSubject());
 
@@ -151,18 +151,18 @@ class ProcessReceivedEmail extends EmailConversationJob
                     ->first();
             }
         } else {
-            $this->logger->debug('Determine discussion - match', $matches);
+            //$this->logger->debug('Determine discussion - match', $matches);
 
             $discussion = Discussion::where('notification_id', $matches[1])->first();
         }
 
         if ($discussion) {
-            $this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
+            //$this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
         } else {
             if ($matches[1]) {
-                $this->logger->debug("Detected discussion but couldn't find it\n\n --");
+                //$this->logger->debug("Detected discussion but couldn't find it\n\n --");
             } else {
-                $this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
+                //$this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
             }
         }
 
@@ -177,31 +177,30 @@ class ProcessReceivedEmail extends EmailConversationJob
     private function getPostContent(ShowResponse $message, bool $reply = false): string
     {
         $htmlContent = $reply ? $message->getStrippedHtml() : $message->getBodyHtml();
-        //$htmlContent = $message->getBodyHtml();
-        //$htmlContent = $message->getStrippedHtml();
+
         $attachments = $message->getAttachments();
         $contentIdMap = $message->getContentIdMap();
 
-        $this->logger->debug('HTML content: '.$htmlContent);
+        //$this->logger->debug('HTML content: '.$htmlContent);
         //$this->logger->debug('Attachment info:'.print_r($attachments, true));
         //$this->logger->debug('Content ID map:'.print_r($contentIdMap, true));
 
         foreach ($attachments as $attachment) {
-            $this->logger->debug('Attachment info:', $attachment);
+            //$this->logger->debug('Attachment info:', $attachment);
 
             $file = $this->mailgun->attachment()->show(Arr::get($attachment, 'url'));
 
             $statusCode = $file->getStatusCode();
-            $this->logger->debug("Got attachment with status code: $statusCode");
+            //$this->logger->debug("Got attachment with status code: $statusCode");
 
             $body = $file->getBody()->getContents();
             //$this->logger->debug("Got attachment body: ".$body);
 
-            $this->logger->debug('Attachment: '.print_r($file, true));
+            //$this->logger->debug('Attachment: '.print_r($file, true));
         }
 
         foreach ($contentIdMap as $content) {
-            $this->logger->debug('Content:', $content);
+            //$this->logger->debug('Content:', $content);
         }
 
         $markdownContent = $this->converter->convert($htmlContent);
@@ -302,7 +301,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         $users = $post->mentionsUsers;
 
         foreach ($users as $user) {
-            $this->logger->debug("Subscribing mentioned user $user->username");
+            //$this->logger->debug("Subscribing mentioned user $user->username");
             $this->subscribe($user, $post->discussion);
         }
     }
