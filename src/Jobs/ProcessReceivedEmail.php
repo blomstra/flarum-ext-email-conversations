@@ -128,11 +128,11 @@ class ProcessReceivedEmail extends EmailConversationJob
         //$this->logger->debug("Determine discussion - content \n\n$content\n\n --");
         $matches = null;
 
-        preg_match('/#(\w{40})#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
+        $hashMatched = preg_match('/#(\w{40})#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
 
         $discussion = null;
 
-        if ($matches[1] === null) {
+        if (! $hashMatched || $matches[1] === null) {
             //$this->logger->debug("Determine discussion - no notification id found\n\n --");
 
             if ($this->settings->get('blomstra-email-conversations.match_subject')) {
