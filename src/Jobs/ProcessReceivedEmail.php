@@ -132,7 +132,7 @@ class ProcessReceivedEmail extends EmailConversationJob
 
         $discussion = null;
 
-        if (! $hashMatched || $matches[1] === null) {
+        if (!$hashMatched || $matches[1] === null) {
             //$this->logger->debug("Determine discussion - no notification id found\n\n --");
 
             if ($this->settings->get('blomstra-email-conversations.match_subject')) {
