@@ -156,15 +156,15 @@ class ProcessReceivedEmail extends EmailConversationJob
             $discussion = Discussion::where('notification_id', $matches[1])->first();
         }
 
-        if ($discussion) {
-            //$this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
-        } else {
-            if ($matches[1]) {
-                //$this->logger->debug("Detected discussion but couldn't find it\n\n --");
-            } else {
-                //$this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
-            }
-        }
+//        if ($discussion) {
+//            $this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
+//        } else {
+//            if ($matches[1]) {
+//                $this->logger->debug("Detected discussion but couldn't find it\n\n --");
+//            } else {
+//                $this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
+//            }
+//        }
 
         return $discussion;
     }
