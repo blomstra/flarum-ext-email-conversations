@@ -128,11 +128,11 @@ class ProcessReceivedEmail extends EmailConversationJob
         //$this->logger->debug("Determine discussion - content \n\n$content\n\n --");
         $matches = null;
 
-        preg_match('/#(\w{40})#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
+        $hashMatched = preg_match('/#(\w{40})#/mi', $content, $matches, PREG_UNMATCHED_AS_NULL);
 
         $discussion = null;
 
-        if ($matches[1] === null) {
+        if (!$hashMatched || $matches[1] === null) {
             //$this->logger->debug("Determine discussion - no notification id found\n\n --");
 
             if ($this->settings->get('blomstra-email-conversations.match_subject')) {
@@ -156,15 +156,15 @@ class ProcessReceivedEmail extends EmailConversationJob
             $discussion = Discussion::where('notification_id', $matches[1])->first();
         }
 
-        if ($discussion) {
-            //$this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
-        } else {
-            if ($matches[1]) {
-                //$this->logger->debug("Detected discussion but couldn't find it\n\n --");
-            } else {
-                //$this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
-            }
-        }
+//        if ($discussion) {
+//            $this->logger->debug("Determine discussion - discussion $discussion->id $discussion->title");
+//        } else {
+//            if ($matches[1]) {
+//                $this->logger->debug("Detected discussion but couldn't find it\n\n --");
+//            } else {
+//                $this->logger->debug('Tried to match based on title: '.$title.', but found nothing');
+//            }
+//        }
 
         return $discussion;
     }
