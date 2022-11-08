@@ -17,6 +17,7 @@ use Blomstra\EmailConversations\UserEmail;
 use Blomstra\EmailConversations\UserEmailRepository;
 use Blomstra\EmailConversations\UserEmailValidator;
 use Flarum\Api\Controller\AbstractCreateController;
+use Flarum\Foundation\ValidationException;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\UserRepository;
@@ -58,10 +59,17 @@ class CreateUserAdditionalEmailController extends AbstractCreateController
         $this->validator->assertValid($model->getAttributes());
 
         $existingCount = $this->repository->getCountForUser($user, $actor);
-        $maxCount = $this->settings->get('blomstra-email-conversations.max-additional-emails-count', 5);
+        $maxCount = $this->settings->get('blomstra-email-conversations.max-additional-emails-count');
+
+        // Workaround for if the max value has been entered, saved and then deleted. This results in the settings key existing in the database
+        // but without a value. The default value as defined in `extend.php` is not returned in this instance. Core bug? Needs discussing...
+        // TODO: revist this!
+        if (!$maxCount) {
+            $maxCount = 5;
+        }
 
         if ($existingCount >= $maxCount) {
-            throw new \Flarum\Foundation\ValidationException(['You may only have a maximum of '.$maxCount.' additional email addresses.']);
+            throw new ValidationException(['You may only have a maximum of '.$maxCount.' additional email addresses.']);
         }
 
         $model->saveOrFail();

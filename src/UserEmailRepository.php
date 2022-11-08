@@ -48,7 +48,7 @@ class UserEmailRepository
 
     public function getCountForUser(User $user, User $actor = null): int
     {
-        return UserEmail::where('user_id', $actor->id)->count();
+        return UserEmail::where('user_id', $user->id)->count();
     }
 
     public function confirm(EmailToken $token): UserEmail
