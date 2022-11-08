@@ -72,7 +72,9 @@ return [
         ->default('blomstra-email-conversations.auto-subscribe', false)
         ->default('blomstra-email-conversations.require_approval', false)
         ->default('blomstra-email-conversations.match_subject', true)
-        ->default('blomstra-email-conversations.mailgun-route-id', null),
+        ->default('blomstra-email-conversations.mailgun-route-id', null)
+        ->default('mail_mailgun_region', 'EU')
+        ->default('mail_mailgun_secret', ''),
 
     (new Extend\Event())
         ->subscribe(AdditionalEmailEventSubscriber::class)
