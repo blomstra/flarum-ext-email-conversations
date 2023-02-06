@@ -15,6 +15,7 @@ use Flarum\Discussion\Discussion;
 use Flarum\Notification\MailableInterface;
 use Flarum\Notification\NotificationMailer;
 use Flarum\Post\CommentPost;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\View\Factory as ViewFactory;
@@ -23,9 +24,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotificationMailerWithId extends NotificationMailer
 {
-    public function __construct(Mailer $mailer, TranslatorInterface $translator, protected ViewFactory $view, protected NotificationIdRepository $notificationIds)
+    public function __construct(Mailer $mailer, TranslatorInterface $translator, SettingsRepositoryInterface $settings, protected ViewFactory $view, protected NotificationIdRepository $notificationIds)
     {
-        parent::__construct($mailer, $translator);
+        parent::__construct($mailer, $translator, $settings);
     }
 
     /**
