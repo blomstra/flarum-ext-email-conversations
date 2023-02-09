@@ -25,6 +25,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use League\HTMLToMarkdown\Converter\BlockquoteConverter;
 use League\HTMLToMarkdown\Converter\CodeConverter;
+use League\HTMLToMarkdown\Converter\DivConverter;
 use League\HTMLToMarkdown\Converter\HorizontalRuleConverter;
 use League\HTMLToMarkdown\Converter\ImageConverter;
 use League\HTMLToMarkdown\Converter\LinkConverter;
@@ -75,6 +76,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         $environment->addConverter(new HorizontalRuleConverter());
         $environment->addConverter(new ListBlockConverter());
         $environment->addConverter(new ListItemConverter());
+        $environment->addConverter(new DivConverter());
 
         $this->converter = new HtmlConverter($environment);
 
@@ -181,7 +183,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         $attachments = $message->getAttachments();
         $contentIdMap = $message->getContentIdMap();
 
-        //$this->logger->debug('HTML content: '.$htmlContent);
+        $this->logger->debug('HTML content: '.$htmlContent);
         //$this->logger->debug('Attachment info:'.print_r($attachments, true));
         //$this->logger->debug('Content ID map:'.print_r($contentIdMap, true));
 
@@ -205,7 +207,7 @@ class ProcessReceivedEmail extends EmailConversationJob
 
         $markdownContent = $this->converter->convert($htmlContent);
 
-        //$this->logger->debug('Markdown content: '.$markdownContent);
+        $this->logger->debug('Markdown content: '.$markdownContent);
 
         return $markdownContent;
     }
