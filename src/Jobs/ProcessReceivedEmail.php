@@ -183,7 +183,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         $attachments = $message->getAttachments();
         $contentIdMap = $message->getContentIdMap();
 
-        $this->logger->debug('HTML content: '.$htmlContent);
+        //$this->logger->debug('HTML content: '.$htmlContent);
         //$this->logger->debug('Attachment info:'.print_r($attachments, true));
         //$this->logger->debug('Content ID map:'.print_r($contentIdMap, true));
 
@@ -207,7 +207,7 @@ class ProcessReceivedEmail extends EmailConversationJob
 
         $markdownContent = $this->converter->convert($htmlContent);
 
-        $this->logger->debug('Markdown content: '.$markdownContent);
+        //$this->logger->debug('Markdown content: '.$markdownContent);
 
         return $markdownContent;
     }
