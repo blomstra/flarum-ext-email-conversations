@@ -72,6 +72,8 @@ class ProcessReceivedEmail extends EmailConversationJob
             'remove_nodes'  => 'script xml head',
             'hard_break'    => false,
             'header_style'  => 'atx',
+            'bold_style'    => '**',
+            'italic_style'  => '*',
         ]);
 
         $environment->addConverter(new HeaderConverter());
