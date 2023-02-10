@@ -31,7 +31,7 @@ class ProcessReceivedEmail extends EmailConversationJob
 {
     protected string $sourceId = 'blomstra-email-conversations';
 
-    protected const TRIM_TITLE = ['RE:', 're:', 'Re:', 'FW:', 'fw:', 'Fw:'];
+    protected const TRIM_TITLE = ['RE:', 're:', 'Re:', 'FW:', 'fw:', 'Fw:', 'Fwd:', 'fwd:', 'FWD:'];
 
     protected SettingsRepositoryInterface $settings;
 
