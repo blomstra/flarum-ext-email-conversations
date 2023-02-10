@@ -13,7 +13,6 @@ namespace Blomstra\EmailConversations\Jobs;
 
 use Blomstra\EmailConversations\UserEmail;
 use Flarum\Discussion\Discussion;
-use Flarum\Extension\ExtensionManager;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
@@ -24,20 +23,6 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use League\HTMLToMarkdown\Converter\BlockquoteConverter;
-use League\HTMLToMarkdown\Converter\CodeConverter;
-use League\HTMLToMarkdown\Converter\DivConverter;
-use League\HTMLToMarkdown\Converter\EmphasisConverter;
-use League\HTMLToMarkdown\Converter\HeaderConverter;
-use League\HTMLToMarkdown\Converter\HorizontalRuleConverter;
-use League\HTMLToMarkdown\Converter\ImageConverter;
-use League\HTMLToMarkdown\Converter\LinkConverter;
-use League\HTMLToMarkdown\Converter\ListBlockConverter;
-use League\HTMLToMarkdown\Converter\ListItemConverter;
-use League\HTMLToMarkdown\Converter\ParagraphConverter;
-use League\HTMLToMarkdown\Converter\PreformattedConverter;
-use League\HTMLToMarkdown\Converter\TableConverter;
-use League\HTMLToMarkdown\Environment;
 use League\HTMLToMarkdown\HtmlConverter;
 use Mailgun\Model\Message\ShowResponse;
 use Psr\Log\LoggerInterface;
@@ -62,38 +47,7 @@ class ProcessReceivedEmail extends EmailConversationJob
         $this->settings = resolve('flarum.settings');
         $this->logger = resolve('log');
         $this->command = resolve(Dispatcher::class);
-
-        /** @var ExtensionManager $extensions */
-        $extensions = resolve(ExtensionManager::class);
-
-        $environment = new Environment([
-            'strip_tags'    => true,
-            'use_autolinks' => false,
-            'remove_nodes'  => 'script xml head',
-            'hard_break'    => false,
-            'header_style'  => 'atx',
-            'bold_style'    => '**',
-            'italic_style'  => '*',
-        ]);
-
-        $environment->addConverter(new HeaderConverter());
-        $environment->addConverter(new EmphasisConverter());
-        $environment->addConverter(new LinkConverter());
-        $environment->addConverter(new ImageConverter());
-        $environment->addConverter(new PreformattedConverter());
-        $environment->addConverter(new CodeConverter());
-        $environment->addConverter(new ParagraphConverter());
-        $environment->addConverter(new BlockquoteConverter());
-        $environment->addConverter(new HorizontalRuleConverter());
-        $environment->addConverter(new ListBlockConverter());
-        $environment->addConverter(new ListItemConverter());
-        $environment->addConverter(new DivConverter());
-
-        if ($extensions->isEnabled(('askvortsov/flarum-markdown-tables'))) {
-            $environment->addConverter(new TableConverter());
-        }
-
-        $this->converter = new HtmlConverter($environment);
+        $this->converter = resolve(HtmlConverter::class);
 
         $this->process();
     }

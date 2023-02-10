@@ -13,6 +13,7 @@ namespace Blomstra\EmailConversations;
 
 use Blomstra\EmailConversations\Api\Serializer\AdditionalEmailSerializer;
 use Blomstra\EmailConversations\Event\EmailReceived;
+use Blomstra\EmailConversations\Provider\HtmlConverterProvider;
 use Blomstra\EmailConversations\Provider\MailgunProvider;
 use Flarum\Api\Controller\ShowUserController;
 use Flarum\Api\Serializer\CurrentUserSerializer;
@@ -60,6 +61,7 @@ return [
         ->delete('/blomstra-additional-email/{id}', 'blomstraPostByEmail.multiEmails.delete', Api\Controller\DeleteUserAdditionalEmailController::class)
         ->post('/email/receive', 'blomstraPostByMail.incoming.receive', Api\Controller\IncomingMailgunController::class)
         ->post('/mailgun/create/route', 'blomstraPostByMail.mailgun.createRoute', Api\Controller\CreateMailgunActionController::class)
+        ->delete('/mailgun/delete/route', 'blomstraPostByMail.mailgun.deleteRoute', Api\Controller\DeleteMailgunActionController::class)
         ->remove('mailSettings.index')
         ->get('/mail/settings', 'mailSettings.index', Api\Controller\ShowEnhancedMailSettingsController::class),
 
@@ -87,7 +89,8 @@ return [
         ->exemptRoute('blomstraPostByMail.incoming.receive'),
 
     (new Extend\ServiceProvider())
-        ->register(MailgunProvider::class),
+        ->register(MailgunProvider::class)
+        ->register(HtmlConverterProvider::class),
 
     // We only want to call this extender if fof/pretty-mail is enabled, and the class exists...
     class_exists(PrettyMailExtend::class) && (resolve(ExtensionManager::class))->isEnabled('fof-pretty-mail') ? (new PrettyMailExtend())
