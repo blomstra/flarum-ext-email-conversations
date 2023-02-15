@@ -28,7 +28,7 @@ use Mailgun\Model\Message\ShowResponse;
 use Psr\Log\LoggerInterface;
 
 /**
- * Mailgun documentation https://documentation.mailgun.com/en/latest/api-sending.html#retrieving-stored-messages
+ * Mailgun documentation https://documentation.mailgun.com/en/latest/api-sending.html#retrieving-stored-messages.
  */
 class ProcessReceivedEmail extends EmailConversationJob
 {
