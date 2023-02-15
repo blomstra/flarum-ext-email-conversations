@@ -27,6 +27,9 @@ use League\HTMLToMarkdown\HtmlConverter;
 use Mailgun\Model\Message\ShowResponse;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Mailgun documentation https://documentation.mailgun.com/en/latest/api-sending.html#retrieving-stored-messages
+ */
 class ProcessReceivedEmail extends EmailConversationJob
 {
     protected string $sourceId = 'blomstra-email-conversations';
@@ -96,6 +99,7 @@ class ProcessReceivedEmail extends EmailConversationJob
     private function determineDiscussion(ShowResponse $message): ?Discussion
     {
         $content = $message->getBodyPlain();
+
         //$this->logger->debug("Determine discussion - content \n\n$content\n\n --");
         $matches = null;
 
@@ -194,7 +198,8 @@ class ProcessReceivedEmail extends EmailConversationJob
             $actor,
             $this->sourceId,
             $message->getSender(),
-            $tag
+            $tag,
+            $message->getBodyHtml()
         );
 
         $this->subscribeRecipientsToDiscussion($message, $discussion, $actor);
@@ -211,7 +216,8 @@ class ProcessReceivedEmail extends EmailConversationJob
             $this->getPostContent($message, true),
             $actor,
             $this->sourceId,
-            $message->getSender()
+            $message->getSender(),
+            $message->getBodyHtml()
         );
 
         $this->subscribeRecipientsToDiscussion($message, $post->discussion, $actor);

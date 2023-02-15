@@ -29,7 +29,7 @@ class HtmlConverterProvider extends AbstractServiceProvider
                 'strip_tags'    => true,
                 'use_autolinks' => false,
                 'remove_nodes'  => 'script xml head',
-                'hard_break'    => false,
+                'hard_break'    => true,
                 'header_style'  => 'atx',
                 'bold_style'    => '**',
                 'italic_style'  => '*',
